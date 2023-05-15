@@ -1,0 +1,72 @@
+.products {
+    background: linear-gradient(0deg, rgba(82,85,43,1) 0%, rgba(245,255,203,0.1) 100%);
+    z-index: 5;
+    padding-bottom: 10px;
+}
+
+.products .button {
+    left: calc(50% - 40px);
+    position: absolute;
+    width: 80px;
+}
+  
+.products h3 {
+    margin: 20px 0;
+    text-align: center;
+    opacity: 0.5;
+}
+  
+.products__type {
+    display: flex;
+}
+  
+.products__honey,
+.products__pollen,
+.products__propolis {
+    width: 33%;
+    background-color: var(--bg-color);
+    border-collapse: collapse;
+    margin-right: 20px;
+    border: var(--info-border);
+    position: relative;
+}
+  
+.products__honey img,
+.products__pollen img,
+.products__propolis img  {
+    width: calc(100% - 20px);
+    height: 300px;
+    object-fit: cover;
+    margin: 10px;
+}
+  
+.products__honey-text,
+.products__pollen-text,
+.products__propolis-text {
+    margin: 0 10px 10px 10px;
+    /* padding: 0 10px 10px 10px; */
+    text-align: center;
+    /* padding-bottom: 30px; */
+}
+  
+.products__honey-text p,
+.products__pollen-text p,
+.products__propolis-text p {
+    text-align: left;
+    padding-bottom: 30px;
+}
+
+.products__propolis {
+    margin-right: 0;
+}
+
+form img.img-products,
+form img.img-products-25,
+form img.img-products-100,
+form img.img-products-10,
+form img.img-products-50
+{
+    width: 290px;
+    padding-right: 0px;
+    border: var(--info-border);
+}

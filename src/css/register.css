@@ -1,0 +1,53 @@
+.register {
+    margin: 10rem;
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+    height: auto;
+    width: 40%;
+    background-color: var(--bg-color);
+    border: var(--info-border);
+    -webkit-box-shadow: 3px 7px 10px 5px #52552B; 
+    box-shadow: 3px 7px 10px 5px #52552B;
+}
+
+.register .button {
+    width: 90px;
+    margin-top: 10px;
+    margin-bottom: 20px;
+}
+
+.register .field {
+    text-align: center;
+}
+
+.register .field input {
+    margin-left: auto;
+    margin-right: auto;
+    align-items: center;
+    display: block;
+}
+
+.input input {
+    width: 70%;
+    margin-top: 2px;
+}
+
+.register .input {
+    padding-left: 5px;
+}
+
+ .register legend {
+    font-size: 20px;
+    padding: 25px 20px 3px 20px;
+    border-bottom: 1px solid transparent;
+    border-image: linear-gradient(0.25turn, rgba(255,249,34), rgba(255,0,128), rgba(56,2,155,0));
+    border-image-slice: 1;
+    width:50%;
+    margin-bottom: 5px;
+ }
+
+.register .field i {
+    padding-left: 5px;
+    vertical-align: middle
+}

@@ -1,0 +1,97 @@
+.sell {
+    display: block;
+    text-align: center;
+    background: linear-gradient(90deg, rgba(82,85,43,1) 0%, rgba(245,255,203,0.1) 100%);
+    z-index: 5;
+    padding-bottom: 20px;
+}
+
+.sell h4 {
+    margin-top: 20px;
+}
+
+.sell img {
+    padding: 0 10px 0 0;
+}
+
+.sell .button {
+    left: calc(70% - 20px);
+    margin-top: 20px;
+    width: 90px;
+}
+
+.sell__10-25,
+.sell__25-p,
+.sell__p-p {
+    display: flex;
+}
+
+.sell__800,
+.sell__25,
+.sell__pp {
+    margin-right: 20px;
+}
+
+.sell__800,
+.sell__10,
+.sell__100,
+.sell__25,
+.sell__p,
+.sell__pp {
+    text-align: center;
+    position: relative;
+    padding: 10px;
+    margin-top: 20px;
+    height: auto;
+    width: 50%;
+    background-color: var(--bg-color);
+    border: var(--info-border);
+}
+
+.sell__pp {
+    width: calc(50% - 10px);
+}
+
+.sell__800 img,
+.sell__100 img,
+.sell__10 img,
+.sell__25 img,
+.sell__p img,
+.sell__pp img {
+    height: calc(12rem + 36px);
+    width: 300px;
+    float: left;
+    object-fit: cover;
+}
+
+.sell__800 p,
+.sell__10 p,
+.sell__100 p
+.sell__25 p,
+.price-25,
+.weight-25,
+.price-100,
+.weight-100,
+.sell__p p,
+.sell__pp p {
+    text-align: center;
+    padding-bottom: 30px;
+}
+
+.sell-10 {
+    background-color: var(--bg-color);
+}
+
+.sell-10 img {
+    padding-right: 0px;
+    border: var(--info-border);
+}
+
+.sell-10 .button {
+    margin-top: 20px;
+    width: 90px;
+}
+
+.delete{
+    margin-left: 10px;
+}

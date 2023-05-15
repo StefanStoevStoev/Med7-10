@@ -1,0 +1,48 @@
+@media screen and (max-width: 1100px) {
+
+  .info__history .button,
+  .info__hive .button {
+    left: calc(50% - 20px);
+  }
+
+}
+
+@media screen and (max-width: 800px) {
+
+  .info {
+    display: block;
+  }
+
+  .info__history,
+  .info__hive {
+    width: 100%;
+  }
+
+  .info__history img,
+  .info__hive img {
+    height: calc(8rem + 36px);
+  }
+
+  .products__type {
+    display: block;
+  }
+
+  .products__pollen,
+  .products__honey {
+    width: 100%;
+    margin-bottom: 20px;
+  }
+
+  .products__propolis {
+    width: 100%;
+    margin-bottom: 0px;
+  }
+
+  .products {
+    margin-bottom: 0;
+  }
+  .user__orders-800,
+  .user__orders-10 {
+      width: 80%;
+  }
+}

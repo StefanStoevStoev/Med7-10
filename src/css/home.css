@@ -1,0 +1,47 @@
+.history,
+.hive {
+    width: 100%;
+    position: relative;
+    padding: 10px;
+    margin-top: 20px;
+    height: auto;
+    width: 0 auto;
+    background-color: var(--bg-color);
+    border: var(--info-border);
+}
+
+.history img,
+.hive img {
+    height: calc(12rem + 36px);
+    width: auto;
+    float: left;
+    border: var(--info-border);
+}
+
+
+p>.firstP { 
+    padding-bottom: 0;
+}
+
+.history .img,
+.hive .img {
+    border: var(--info-border);
+    float: right;
+}
+
+.history .img3,
+.hive .img3  {
+    height: calc(11rem + 36px);
+    width: calc(25% - 20px);
+    object-fit: cover;
+}
+
+b {
+    font-weight: 600;
+}
+
+.history p,
+.hive p {
+    text-align: left;
+    padding-bottom: 30px;
+}

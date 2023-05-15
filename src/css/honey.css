@@ -1,0 +1,52 @@
+.honey,
+.pollen,
+.propolis {
+    position: relative;
+    height: auto;
+    width: 100%;
+    background-color: var(--bg-color);
+    border: var(--info-border);
+}
+
+.honey h4,
+.pollen h4,
+.propolis h4 {
+    margin-top: 10px;
+}
+
+.honey img,
+.pollen img,
+.propolis img  {
+    height: calc(12rem + 36px);
+    width: auto;
+    float: left;
+    object-fit: cover;
+    margin: 10px;
+}
+
+.honey .img,
+.pollen .img,
+.propolis .img {
+    margin-right: 10px;
+}
+
+.honey .img2,
+.pollen .img2,
+.propolis .img2 {
+    float: right;
+    margin-right: 0;
+}
+
+.honey p,
+.pollen p,
+.propolis p {
+    width: 100%;
+    text-align: left;
+    padding-right: 0px;
+    padding-bottom: 30px;
+} 
+
+.img {
+    border: var(--info-border);
+    float: right;
+}
