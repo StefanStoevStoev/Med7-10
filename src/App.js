@@ -27,21 +27,30 @@ let arrProductsId = [];
 function App() {
   const [user, setUser] = useState([]);
   const [auth, setAuth] = useLocalStorage('auth', {});
-  const [data, setData] = useState({});
+  const [orderData, setOrderData] = useState({});
 
   const [authEdit, setAuthEdit] = useState([]);
   let [userProductsEdit, setUserProductsEdit] = useState([]);
   const navigate = useNavigate();
-
+  const userId = user.id;
 
   useEffect(() => {
-    const userId = user.id;
+    const fetchOrders = async () => {
+      const userId = user.id;
+      try {
+        const res = await axios.post("http://localhost:5000/api/orders/get", { userId })
+        setOrderData(res);
+      } catch (err) {
+        toast.error(err.response);
+      }
+    };
+    fetchOrders();
 
-    axios.post("http://localhost:5000/api/orders/get", { userId })
-      .then(array => {
-        setData(array);
-        // arrProductsId.push((state) => [...state, array]);
-      }).catch((err) => toast.error(err.response));
+    // axios.post("http://localhost:5000/api/orders/get", { userId })
+    //   .then((array) => {
+    //     setOrderData(array)
+    //   }).catch((err) => toast.error(err.response));
+
   }, []);
 
   const productDelete = (e) => {
@@ -60,25 +69,28 @@ function App() {
     const productsId = productsData._id;
     const quantity = Number(productsData.quantity);
 
-    setUserProductsEdit(productsData);
+    // console.log(orderData);
+    // console.log(orderData.data.length);
 
-    // console.log(userProductsEdit);
+    if (orderData.data?.fieldCount !== 0 || orderData.data.length > 0) {
 
-    if (data.data.length === 0) {
-      data.data.map(x => {
+      orderData.data.map(x => {
+        // console.log(orderData);
         arrProductsId.push(x.fk_product_id);
       });
     }
 
     if (arrProductsId.find(element => element === productsId) === undefined) {
       arrProductsId.push(productsId);
+      // console.log(arrProductsId);
+      setUserProductsEdit(productsData);
 
       axios.post("http://localhost:5000/api/orders", {
         userId,
         productsId,
         quantity,
       }).then((array) => {
-        setData(array)
+        setOrderData(array)
       }).catch((err) => toast.error(err.response.data));
       navigate(`/users/${userId}`);
     }
@@ -115,6 +127,7 @@ function App() {
       AuthContext.Provider value={
         {
           user,
+          orderData,
           userProductsEdit,
           productDelete,
           userProducts,

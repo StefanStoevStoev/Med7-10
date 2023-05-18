@@ -15,17 +15,18 @@ app.use(cors());
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.get("/api/get", (req, res) => {
-    const sqlGet = "SELECT * FROM med7.products";
-    db.query(sqlGet, (error, result) => {
+app.post("/api/product/get", (req, res) => {
+    const  id  = req.body.productId;
+    const sqlGet = "SELECT * FROM med7.products WHERE id = (?)";
+    // console.log(req.body.productId);
+    let papa = db.query(sqlGet, id, (error, result) => {
         if (error) {
             return res.json("Error");
-        } else if (result.length > 0) {
-            return res.json("Success");
-        } else {
-            return res.json("False");
         }
+        console.log(res.json(result));
+        return res.json(result);
     });
+    console.log(papa);
 });
 
 // app.get("/", (req, res) => {
@@ -69,7 +70,7 @@ app.post("/api/orders", (req, res) => {
 
 app.post("/api/orders/get", (req, res) => {
     const  {userId}  = req.body;
-    const sqlInsert = "SELECT fk_product_id FROM med7.orders WHERE fk_users_id = (?)";
+    const sqlInsert = "SELECT fk_product_id, quantity FROM med7.orders WHERE fk_users_id = (?)";
     // console.log(userId);
 
     db.query(sqlInsert, [userId], (error, result) => {
@@ -78,6 +79,7 @@ app.post("/api/orders/get", (req, res) => {
         }
         // res.send(JSON.stringify(result));
         return res.json(result);
+        // return result;
         // console.log(result);
         //  console.log(error);
     });

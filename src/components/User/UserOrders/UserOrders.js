@@ -1,22 +1,74 @@
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
+import axios from "axios";
+import { toast } from "react-toastify";
 
 import { AuthContext } from "../../../contexts/AuthContext";
 
-const papa = [];
+const arr = [];
 
 const UserOrders = () => {
-    const { productDelete, userProductsEdit } = useContext(AuthContext);
+    const { user, orderData, productDelete, userProductsEdit } = useContext(AuthContext);
+    const { productData, setProductData } = useState();
+    let arrProductsId = [];
 
-    if (!papa.find(x => x._id === userProductsEdit._id)) {
-        papa.push(userProductsEdit);
+    // function fetchProducts(productId) {
+    //     try {
+    //         const res = axios.post("http://localhost:5000/api/product/get", { productId })
+    //         setProductData(res);
+    //     } catch (err) {
+    //         toast.error(err.response);
+    //     }
+    // };
 
+    useEffect(() => {
+        //   fetchProducts();
+    }, []);
+
+    console.log(orderData.data);
+    // fetchProducts(1);
+    // orderData.data?.fieldCount !== 0 ||
+    if ( orderData.data.length > 0) {
+        // console.log(orderData.data);
+        // console.log(orderData.data[0]);
+
+console.log(1);
+        orderData.data.map(x => arrProductsId.push(x.fk_product_id));
+        arrProductsId.map(x => {
+
+
+            const fetchProducts = async () => {
+                try {
+                    const res = await axios.post("http://localhost:5000/api/product/get", { x })
+                    // setProductData(res);
+                    console.log(res);
+                } catch (err) {
+                    toast.error(err.response);
+                }
+            }
+            // console.log(fetchProducts(x))
+
+        });
+        // fetchProducts(1);
+        // orderData.data.map(x => {
+        //   // console.log(orderData);
+        //   arrProductsId.push(x.fk_product_id);
+        // });
+    }
+
+    // console.log(user.id);
+
+
+
+    if (!arr.find(x => x._id === userProductsEdit._id) && userProductsEdit.length !== 0) {
+        arr.push(userProductsEdit);
     };
+
 
     return (
         <>
-            {papa.length > 0 ? papa.map(x =>
-
-                < form className="sell__10 sell-10" key={x._id} name={x._id} >
+            {userProductsEdit._id && user.id && arr.length > 0 ? arr.map(x =>
+                < form className="sell__10 sell-10" key={x._id + x.weight}
+                    name={`${x._id} + ${x.weight}`} >
                     <img
                         src={x.img}
                         alt="honey-metal box"

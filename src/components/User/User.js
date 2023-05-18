@@ -8,7 +8,7 @@ import UserOrders from "./UserOrders/UserOrders";
 
 const User = () => {
     const [products, setProducts] = useState([]);
-    const { userEdit } = useContext(AuthContext);
+    const { user } = useContext(AuthContext);
 
     // const addProductToUser = (productData) => {
     //     console.log(productData);
@@ -24,9 +24,12 @@ const User = () => {
     return (
         <section className="user">
             <UserDetails />
-            <div className="user__orders" >
-                <UserOrders/>
-            </div>
+            { user.id ?
+                <div className="user__orders" >
+                    <UserOrders />
+                </div> : ''
+            }
+
         </section>
     );
 }
