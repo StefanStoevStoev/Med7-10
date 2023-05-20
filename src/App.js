@@ -32,24 +32,20 @@ function App() {
   const [authEdit, setAuthEdit] = useState([]);
   let [userProductsEdit, setUserProductsEdit] = useState([]);
   const navigate = useNavigate();
-  const userId = user.id;
+  
 
   useEffect(() => {
     const fetchOrders = async () => {
       const userId = user.id;
       try {
-        const res = await axios.post("http://localhost:5000/api/orders/get", { userId })
+        const res = await axios.post("http://localhost:5000/api/orders/get", { userId });
+        console.log(res);
         setOrderData(res);
       } catch (err) {
         toast.error(err.response);
       }
     };
     fetchOrders();
-
-    // axios.post("http://localhost:5000/api/orders/get", { userId })
-    //   .then((array) => {
-    //     setOrderData(array)
-    //   }).catch((err) => toast.error(err.response));
 
   }, []);
 
@@ -69,10 +65,9 @@ function App() {
     const productsId = productsData._id;
     const quantity = Number(productsData.quantity);
 
-    // console.log(orderData);
     // console.log(orderData.data.length);
 
-    if (orderData.data?.fieldCount !== 0 || orderData.data.length > 0) {
+    if ( orderData.data?.fieldCount !== 0 || orderData.data.length > 0) {
 
       orderData.data.map(x => {
         // console.log(orderData);
@@ -129,6 +124,7 @@ function App() {
           user,
           orderData,
           userProductsEdit,
+          arrProductsId,
           productDelete,
           userProducts,
           userLogin,

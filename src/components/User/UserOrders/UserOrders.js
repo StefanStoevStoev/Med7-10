@@ -7,68 +7,52 @@ import { AuthContext } from "../../../contexts/AuthContext";
 const arr = [];
 
 const UserOrders = () => {
-    const { user, orderData, productDelete, userProductsEdit } = useContext(AuthContext);
+    const { user, orderData, productDelete, userProductsEdit, arrProductsId } = useContext(AuthContext);
     const { productData, setProductData } = useState();
-    let arrProductsId = [];
 
-    // function fetchProducts(productId) {
-    //     try {
-    //         const res = axios.post("http://localhost:5000/api/product/get", { productId })
-    //         setProductData(res);
-    //     } catch (err) {
-    //         toast.error(err.response);
-    //     }
-    // };
+    function fetchProducts2(productId) {
+        try {
+            const res = axios.get("http://localhost:5000/api/product/get", { productId })
+                // .then((response) => response.json())
+                .then((data) => console.log(data))
+                .catch((error) => console.log(error));
+            setProductData(res);
+        } catch (err) {
+            toast.error(err.response);
+        }
+    };
 
     useEffect(() => {
         //   fetchProducts();
     }, []);
 
-    console.log(orderData.data);
-    // fetchProducts(1);
-    // orderData.data?.fieldCount !== 0 ||
-    if ( orderData.data.length > 0) {
-        // console.log(orderData.data);
-        // console.log(orderData.data[0]);
+    console.log(arrProductsId);
 
-console.log(1);
-        orderData.data.map(x => arrProductsId.push(x.fk_product_id));
-        arrProductsId.map(x => {
+    // orderData.data?.fieldCount !== 0 || 
+    if (arrProductsId.length > 0) {
 
+        // orderData.data.map(x => arrProductsId.push(x.fk_product_id));
+        const pap = arrProductsId.map(x => {
 
-            const fetchProducts = async () => {
-                try {
-                    const res = await axios.post("http://localhost:5000/api/product/get", { x })
-                    // setProductData(res);
-                    console.log(res);
-                } catch (err) {
-                    toast.error(err.response);
-                }
-            }
-            // console.log(fetchProducts(x))
+            axios.post("http://localhost:5000/api/product/get", {x})
+                // .then((response) => response.json())
+                .then((data) => console.log(data.data))
+                .catch((error) => console.log(error));
 
         });
-        // fetchProducts(1);
-        // orderData.data.map(x => {
-        //   // console.log(orderData);
-        //   arrProductsId.push(x.fk_product_id);
-        // });
-    }
 
-    // console.log(user.id);
-
-
-
-    if (!arr.find(x => x._id === userProductsEdit._id) && userProductsEdit.length !== 0) {
-        arr.push(userProductsEdit);
     };
+
+    // if (!arr.find(x => x._id === userProductsEdit._id) && userProductsEdit.length !== 0) {
+    //     arr.push(userProductsEdit);
+    // };
 
 
     return (
         <>
-            {userProductsEdit._id && user.id && arr.length > 0 ? arr.map(x =>
-                < form className="sell__10 sell-10" key={x._id + x.weight}
-                    name={`${x._id} + ${x.weight}`} >
+            {userProductsEdit.id && user.id && arr.length > 0 ? arr.map(x =>
+                < form className="sell__10 sell-10" key={x.id + x.weight}
+                    name={`${x.id} + ${x.weight}`} >
                     <img
                         src={x.img}
                         alt="honey-metal box"

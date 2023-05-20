@@ -16,17 +16,19 @@ app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.post("/api/product/get", (req, res) => {
-    const  id  = req.body.productId;
+    const  id  = req.body.x;
+    // console.log(req.body.x);
     const sqlGet = "SELECT * FROM med7.products WHERE id = (?)";
-    // console.log(req.body.productId);
-    let papa = db.query(sqlGet, id, (error, result) => {
+    db.query(sqlGet, [id], (error, result) => {
+
         if (error) {
             return res.json("Error");
         }
-        console.log(res.json(result));
+        // console.log(res.json(result));
+        // console.log(result);
         return res.json(result);
     });
-    console.log(papa);
+    
 });
 
 // app.get("/", (req, res) => {
