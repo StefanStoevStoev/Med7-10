@@ -35,17 +35,6 @@ function App() {
   
 
   useEffect(() => {
-    const fetchOrders = async () => {
-      const userId = user.id;
-      try {
-        const res = await axios.post("http://localhost:5000/api/orders/get", { userId });
-        console.log(res);
-        setOrderData(res);
-      } catch (err) {
-        toast.error(err.response);
-      }
-    };
-    fetchOrders();
 
   }, []);
 
@@ -60,17 +49,21 @@ function App() {
     setUserProductsEdit(remove);
   };
 
-  const userProducts = (productsData) => {
+  const userProducts = (productsData) => {//////////////
+    setOrderData({});
     const userId = user.id;
     const productsId = productsData._id;
     const quantity = Number(productsData.quantity);
-
-    // console.log(orderData.data.length);
-
-    if ( orderData.data?.fieldCount !== 0 || orderData.data.length > 0) {
-
-      orderData.data.map(x => {
-        // console.log(orderData);
+    let dataOrder = {
+      fk_users_id: userId,
+      fk_product_id: productsId,
+      quantity: quantity
+    }
+    // console.log(1);
+// || orderData?.data.fieldCount !== 0
+    if ( orderData.length > 0  ) {
+      // console.log(1);
+      orderData.map(x => {
         arrProductsId.push(x.fk_product_id);
       });
     }
@@ -78,22 +71,41 @@ function App() {
     if (arrProductsId.find(element => element === productsId) === undefined) {
       arrProductsId.push(productsId);
       // console.log(arrProductsId);
+      // console.log(2);
       setUserProductsEdit(productsData);
 
-      axios.post("http://localhost:5000/api/orders", {
+      const papa = axios.post("http://localhost:5000/api/orders", {
         userId,
         productsId,
         quantity,
       }).then((array) => {
-        setOrderData(array)
+        // console.log(3);
+        // console.log(array.data);
+        setOrderData(dataOrder)
       }).catch((err) => toast.error(err.response.data));
+      console.log(papa);
       navigate(`/users/${userId}`);
     }
+    // console.log(4);
+    console.log(orderData);
   };
 
   const userLogin = (authData) => {
     setUser(authData);
     setAuth(authData);
+    const fetchOrders = async () => {
+      const userId = authData.id;
+      // console.log(authData.id);
+      try {
+        const res = await axios.post("http://localhost:5000/api/orders/get", { userId });
+        // console.log(res);
+        setOrderData(res.data);
+      } catch (err) {
+        toast.error(err.response);
+      }
+    };
+    fetchOrders();
+    // console.log(orderData);
   };
 
   const userRemove = () => {

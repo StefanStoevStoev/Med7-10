@@ -3,63 +3,63 @@ import axios from "axios";
 import { toast } from "react-toastify";
 
 import { AuthContext } from "../../../contexts/AuthContext";
-
 const arr = [];
+let arrProductsId = [];
 
 const UserOrders = () => {
-    const { user, orderData, productDelete, userProductsEdit, arrProductsId } = useContext(AuthContext);
-    const { productData, setProductData } = useState();
+    const { orderData, productDelete } = useContext(AuthContext);
+    const [state, setState] = useState([]);
 
-    function fetchProducts2(productId) {
+    async function fetchProducts2(productId, quantitNum) {
         try {
-            const res = axios.get("http://localhost:5000/api/product/get", { productId })
-                // .then((response) => response.json())
-                .then((data) => console.log(data))
+            const res = await axios.post("http://localhost:5000/api/product/get", { productId })
+                .then((data) => {
+                    const product = data.data[0];
+                    product.quantity = quantitNum;
+                    if (!arr.find(pp => pp.id === data?.data[0].id)) {
+                        setState(product);
+                    }
+                    return data.data;
+                })
                 .catch((error) => console.log(error));
-            setProductData(res);
+            console.log(8);
+            arrProductsId.push(res[0].id);
+            arr.push(res);
         } catch (err) {
             toast.error(err.response);
         }
     };
 
     useEffect(() => {
-        //   fetchProducts();
-    }, []);
+        if (orderData.length > 0) {
+            orderData.map((x) => {
+                if (!arrProductsId.find(pp => pp === x.fk_product_id)) {
+                    console.log(3);
+                    fetchProducts2(x.fk_product_id, x.quantity);
+                }
+            })
+        } else if (orderData.fk_users_id !== undefined) {
+            fetchProducts2(orderData.fk_product_id, orderData.quantity);
+        }
+    }, [orderData]);
 
+    // console.log(arrProductsId);
+    // console.log(arr);
+    // console.log(orderData);
     console.log(arrProductsId);
-
-    // orderData.data?.fieldCount !== 0 || 
-    if (arrProductsId.length > 0) {
-
-        // orderData.data.map(x => arrProductsId.push(x.fk_product_id));
-        const pap = arrProductsId.map(x => {
-
-            axios.post("http://localhost:5000/api/product/get", {x})
-                // .then((response) => response.json())
-                .then((data) => console.log(data.data))
-                .catch((error) => console.log(error));
-
-        });
-
-    };
-
-    // if (!arr.find(x => x._id === userProductsEdit._id) && userProductsEdit.length !== 0) {
-    //     arr.push(userProductsEdit);
-    // };
-
 
     return (
         <>
-            {userProductsEdit.id && user.id && arr.length > 0 ? arr.map(x =>
-                < form className="sell__10 sell-10" key={x.id + x.weight}
-                    name={`${x.id} + ${x.weight}`} >
+            {arr.length > 0 ? arr.map(x =>
+                < form className="sell__10 sell-10" key={x[0].id + x[0].weight}
+                    name={`${x[0].id} + ${x[0].weight}`} >
                     <img
-                        src={x.img}
+                        src={x[0].img}
                         alt="honey-metal box"
                     />
-                    <h4 className='title' >{x.title}</h4>
-                    <p className="weight">{x.weight}</p>
-                    <p className="price">{x.price}</p>
+                    <h4 className='title' >{x[0].title}</h4>
+                    <p className="weight">{x[0].weight}kg</p>
+                    <p className="price">Единична цена - {x[0].price}лв.</p>
                     <div className="quantity">
                         <label
                             className="screen-reader-text"
@@ -74,7 +74,7 @@ const UserOrders = () => {
                             min={1}
                             max={20}
                             name="quantity"
-                            defaultValue={x.quantity}
+                            defaultValue={x[0].quantity}
                             title="Qty"
                             // size={4}
                             pattern="[0-9]*"

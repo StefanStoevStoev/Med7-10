@@ -16,8 +16,8 @@ app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.post("/api/product/get", (req, res) => {
-    const  id  = req.body.x;
-    // console.log(req.body.x);
+    const id = req.body.productId;
+    // console.log(typeof req.body.x);
     const sqlGet = "SELECT * FROM med7.products WHERE id = (?)";
     db.query(sqlGet, [id], (error, result) => {
 
@@ -28,7 +28,7 @@ app.post("/api/product/get", (req, res) => {
         // console.log(result);
         return res.json(result);
     });
-    
+
 });
 
 // app.get("/", (req, res) => {
@@ -60,26 +60,30 @@ app.post("/api/login", (req, res) => {
 
 app.post("/api/orders", (req, res) => {
     const { userId, productsId, quantity } = req.body;
+
     const sqlInsert = "INSERT INTO med7.orders (fk_users_id, fk_product_id, quantity)VALUES ((SELECT id FROM med7.users WHERE id =(?)), (SELECT id FROM med7.products WHERE id =(?)), (?));";
 
     db.query(sqlInsert, [userId, productsId, quantity], (error, result) => {
         if (error) {
             return res.json("Error");
         }
+        // console.log(res.json(result));
         return res.json(result);
     });
 });
 
 app.post("/api/orders/get", (req, res) => {
-    const  {userId}  = req.body;
+    const userId = req.body.userId;
+    // console.log(req.body);
+
     const sqlInsert = "SELECT fk_product_id, quantity FROM med7.orders WHERE fk_users_id = (?)";
-    // console.log(userId);
 
     db.query(sqlInsert, [userId], (error, result) => {
         if (error) {
             return res.json("Error");
         }
-        // res.send(JSON.stringify(result));
+        // console.log(result);
+        // console.log(res.json(result));
         return res.json(result);
         // return result;
         // console.log(result);
