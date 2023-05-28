@@ -3,28 +3,42 @@ import axios from "axios";
 import { toast } from "react-toastify";
 
 import { AuthContext } from "../../../contexts/AuthContext";
-const arr = [];
+let arr = [];
 let arrProductsId = [];
 
 const UserOrders = () => {
-    const { orderData, productDelete } = useContext(AuthContext);
+    const { user, orderData } = useContext(AuthContext);
     const [state, setState] = useState([]);
+    // const [arr, setArr] = useState([]);
 
     async function fetchProducts2(productId, quantitNum) {
         try {
-            const res = await axios.post("http://localhost:5000/api/product/get", { productId })
-                .then((data) => {
-                    const product = data.data[0];
-                    product.quantity = quantitNum;
-                    if (!arr.find(pp => pp.id === data?.data[0].id)) {
-                        setState(product);
-                    }
-                    return data.data;
-                })
-                .catch((error) => console.log(error));
-            console.log(8);
-            arrProductsId.push(res[0].id);
-            arr.push(res);
+            if (!arr.find(x => x[0].id === productId)) {
+                const res = await axios.post("http://localhost:5000/api/product/get", { productId })
+                    .then((data) => {
+                        const product = data.data[0];
+                        product.quantity = quantitNum;
+                        if (!arr.find(pp => pp.id === data?.data[0].id)) {
+                            setState(product);
+                        }
+                        return data.data;
+                    })
+                    .catch((error) => console.log(error));
+                arrProductsId.push(res[0].id);
+                arr.push(res);
+            }
+        } catch (err) {
+            toast.error(err.response);
+        }
+    };
+
+    async function deleteOrder(userId, productsId) {
+        try {
+            const res = await axios.post("http://localhost:5000/api/delete/order", {
+                userId,
+                productsId,
+            }).then(() => {
+            }).catch((err) => toast.error(err.response.data));
         } catch (err) {
             toast.error(err.response);
         }
@@ -34,25 +48,45 @@ const UserOrders = () => {
         if (orderData.length > 0) {
             orderData.map((x) => {
                 if (!arrProductsId.find(pp => pp === x.fk_product_id)) {
-                    console.log(3);
                     fetchProducts2(x.fk_product_id, x.quantity);
                 }
             })
         } else if (orderData.fk_users_id !== undefined) {
             fetchProducts2(orderData.fk_product_id, orderData.quantity);
         }
+        // if ( typeof orderData === 'object'){
+        //     orderData = {};
+        // };
     }, [orderData]);
 
-    // console.log(arrProductsId);
-    // console.log(arr);
-    // console.log(orderData);
-    console.log(arrProductsId);
+    // useEffect(() => {
+
+    // },[arr]);
+
+    const productDelete = (orderDelete) => {
+        orderDelete.preventDefault();
+        const element = orderDelete.target.parentElement;
+        const userId = user.id;
+        const productsId = Number(element.getAttribute("name"));
+
+        // function remove(element) {
+        //     return element[0].id === productsId;
+        // }
+        // console.log(arr);
+        // arr = arr.filter(remove, productsId);
+
+        deleteOrder(userId, productsId);
+    };
+
+    const orderProduct = () => {
+
+    };
 
     return (
         <>
             {arr.length > 0 ? arr.map(x =>
-                < form className="sell__10 sell-10" key={x[0].id + x[0].weight}
-                    name={`${x[0].id} + ${x[0].weight}`} >
+                < form className="sell__10 sell-10" key={x[0].id}
+                    name={x[0].id} >
                     <img
                         src={x[0].img}
                         alt="honey-metal box"
@@ -84,12 +118,15 @@ const UserOrders = () => {
                         />
                     </div>
                     <button
-                        className="button sell10">поръчка
+                        className="button sell10" onClick={orderProduct}>поръчка
                     </button>
                     <button className="btn-delete delete" onClick={productDelete}>отказвам</button>
                 </form >
             )
-                : ''}
+                : <h3 className="userOrders">
+                    Нямате поръчки
+                </h3>
+            }
         </>
     );
 }

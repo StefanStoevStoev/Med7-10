@@ -102,6 +102,17 @@ app.put("/api/post", (req, res) => {
     });
 });
 
+app.post("/api/delete/order", (req, res) => {
+    const { userId, productsId } = req.body;
+    const sqlDelete = "DELETE FROM med7.orders WHERE fk_users_id = (?) AND fk_product_id = (?);";
+    db.query(sqlDelete, [userId, productsId], (error, result) => {
+        if (error) {
+            return res.json("Error");
+        }
+        return res.json(result);
+    });
+});
+
 app.listen(5000, () => {
     console.log("Сървърът е стартиран на порт 5000");
-})
+});

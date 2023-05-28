@@ -27,29 +27,18 @@ let arrProductsId = [];
 function App() {
   const [user, setUser] = useState([]);
   const [auth, setAuth] = useLocalStorage('auth', {});
-  const [orderData, setOrderData] = useState({});
+  let [orderData, setOrderData] = useState({});
 
   const [authEdit, setAuthEdit] = useState([]);
   let [userProductsEdit, setUserProductsEdit] = useState([]);
   const navigate = useNavigate();
-  
+
 
   useEffect(() => {
 
   }, []);
 
-  const productDelete = (e) => {
-    e.preventDefault();
-    const element = e.target.parentElement;
-    const id = element.getAttribute("name");
-
-    let remove = userProductsEdit.filter(function (e) {
-      return e._id !== Number(id);
-    });
-    setUserProductsEdit(remove);
-  };
-
-  const userProducts = (productsData) => {//////////////
+  const userProducts = (productsData) => {
     setOrderData({});
     const userId = user.id;
     const productsId = productsData._id;
@@ -59,10 +48,7 @@ function App() {
       fk_product_id: productsId,
       quantity: quantity
     }
-    // console.log(1);
-// || orderData?.data.fieldCount !== 0
-    if ( orderData.length > 0  ) {
-      // console.log(1);
+    if (orderData.length > 0) {
       orderData.map(x => {
         arrProductsId.push(x.fk_product_id);
       });
@@ -70,23 +56,17 @@ function App() {
 
     if (arrProductsId.find(element => element === productsId) === undefined) {
       arrProductsId.push(productsId);
-      // console.log(arrProductsId);
-      // console.log(2);
       setUserProductsEdit(productsData);
 
-      const papa = axios.post("http://localhost:5000/api/orders", {
+      axios.post("http://localhost:5000/api/orders", {
         userId,
         productsId,
         quantity,
-      }).then((array) => {
-        // console.log(3);
-        // console.log(array.data);
+      }).then(() => {
         setOrderData(dataOrder)
       }).catch((err) => toast.error(err.response.data));
-      console.log(papa);
       navigate(`/users/${userId}`);
     }
-    // console.log(4);
     console.log(orderData);
   };
 
@@ -95,25 +75,25 @@ function App() {
     setAuth(authData);
     const fetchOrders = async () => {
       const userId = authData.id;
-      // console.log(authData.id);
       try {
         const res = await axios.post("http://localhost:5000/api/orders/get", { userId });
-        // console.log(res);
         setOrderData(res.data);
       } catch (err) {
         toast.error(err.response);
       }
     };
     fetchOrders();
-    // console.log(orderData);
   };
 
   const userRemove = () => {
+    setUser([]);
     setAuth({});
   }
 
   const userLogout = () => {
+    setUser([]);
     setAuth({});
+    navigate('/');
   };
 
   const userEdit = (userEditData) => {
@@ -137,7 +117,6 @@ function App() {
           orderData,
           userProductsEdit,
           arrProductsId,
-          productDelete,
           userProducts,
           userLogin,
           userLogout,
