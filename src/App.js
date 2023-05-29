@@ -38,6 +38,35 @@ function App() {
 
   }, []);
 
+  async function deleteOrder(userId, productsId) {
+    try {
+        const res = await axios.post("http://localhost:5000/api/delete/order", {
+            userId,
+            productsId,
+        }).then(() => {
+        }).catch((err) => toast.error(err.response.data));
+    } catch (err) {
+        toast.error(err.response);
+    }
+};
+
+const productDelete = (orderDelete) => {
+    orderDelete.preventDefault();
+    const element = orderDelete.target.parentElement;
+    const userId = user.id;
+    const productsId = Number(element.getAttribute("name"));
+
+    console.log(orderData);
+
+    function remove(element) {
+        return element[0].id === productsId;
+    }
+    // console.log(arr);
+    orderData.filter(remove, productsId);
+
+    deleteOrder(userId, productsId);
+};
+
   const userProducts = (productsData) => {
     setOrderData({});
     const userId = user.id;
@@ -63,7 +92,9 @@ function App() {
         productsId,
         quantity,
       }).then(() => {
-        setOrderData(dataOrder)
+        console.log(orderData);
+        setOrderData(dataOrder);
+        console.log(orderData);
       }).catch((err) => toast.error(err.response.data));
       navigate(`/users/${userId}`);
     }
@@ -115,6 +146,7 @@ function App() {
         {
           user,
           orderData,
+          productDelete,
           userProductsEdit,
           arrProductsId,
           userProducts,

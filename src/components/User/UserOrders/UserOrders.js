@@ -7,76 +7,57 @@ let arr = [];
 let arrProductsId = [];
 
 const UserOrders = () => {
-    const { user, orderData } = useContext(AuthContext);
+    const { orderData, productDelete } = useContext(AuthContext);
     const [state, setState] = useState([]);
-    // const [arr, setArr] = useState([]);
+    // const [arrNew, setArrNew] = useState([]);
 
-    async function fetchProducts2(productId, quantitNum) {
+    async function fetchProducts(productId, quantitNum) {
+        let res;
         try {
             if (!arr.find(x => x[0].id === productId)) {
-                const res = await axios.post("http://localhost:5000/api/product/get", { productId })
+                res = await axios.post("http://localhost:5000/api/product/get", { productId })
                     .then((data) => {
                         const product = data.data[0];
                         product.quantity = quantitNum;
                         if (!arr.find(pp => pp.id === data?.data[0].id)) {
-                            setState(product);
+                            // setState(product);
                         }
                         return data.data;
                     })
                     .catch((error) => console.log(error));
                 arrProductsId.push(res[0].id);
-                arr.push(res);
+                
+                
             }
-        } catch (err) {
-            toast.error(err.response);
-        }
-    };
 
-    async function deleteOrder(userId, productsId) {
-        try {
-            const res = await axios.post("http://localhost:5000/api/delete/order", {
-                userId,
-                productsId,
-            }).then(() => {
-            }).catch((err) => toast.error(err.response.data));
         } catch (err) {
             toast.error(err.response);
         }
+        setState(res);
+        arr.push(res);
+        console.log(res);
     };
 
     useEffect(() => {
         if (orderData.length > 0) {
             orderData.map((x) => {
                 if (!arrProductsId.find(pp => pp === x.fk_product_id)) {
-                    fetchProducts2(x.fk_product_id, x.quantity);
+                    setState(fetchProducts(x.fk_product_id, x.quantity));
                 }
             })
         } else if (orderData.fk_users_id !== undefined) {
-            fetchProducts2(orderData.fk_product_id, orderData.quantity);
+            setState(fetchProducts(orderData.fk_product_id, orderData.quantity));
         }
+        // setState(arr);
+        // console.log(state);
         // if ( typeof orderData === 'object'){
         //     orderData = {};
         // };
     }, [orderData]);
-
+    console.log(arr);
+    console.log(state);
     // useEffect(() => {
-
-    // },[arr]);
-
-    const productDelete = (orderDelete) => {
-        orderDelete.preventDefault();
-        const element = orderDelete.target.parentElement;
-        const userId = user.id;
-        const productsId = Number(element.getAttribute("name"));
-
-        // function remove(element) {
-        //     return element[0].id === productsId;
-        // }
-        // console.log(arr);
-        // arr = arr.filter(remove, productsId);
-
-        deleteOrder(userId, productsId);
-    };
+    // }, [arrNew]);
 
     const orderProduct = () => {
 
@@ -84,7 +65,7 @@ const UserOrders = () => {
 
     return (
         <>
-            {arr.length > 0 ? arr.map(x =>
+            {state.length > 0 ? arr.map(x =>
                 < form className="sell__10 sell-10" key={x[0].id}
                     name={x[0].id} >
                     <img
