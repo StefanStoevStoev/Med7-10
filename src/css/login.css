@@ -1,0 +1,58 @@
+.login {
+    margin: 10rem;
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+    height: auto;
+    width: 40%;
+    background-color: var(--bg-color);
+    border: var(--info-border);
+    -webkit-box-shadow: 3px 7px 10px 5px #52552B; 
+    box-shadow: 3px 7px 10px 5px #52552B;
+}
+
+.login .button {
+    width: 90px;
+    margin-top: 10px;
+    margin-bottom: 20px;
+}
+
+.field {
+    margin: 10px;
+}
+
+.login .field input {
+    margin-left: auto;
+    margin-right: auto;
+    align-items: center;
+    display: block;
+}
+
+.input input {
+    width: 70%;
+    line-height: 0px;
+}
+
+.input {
+    padding-left: 5px;
+    padding-bottom: 10px;
+}
+
+.login legend {
+    font-size: 20px;
+    padding: 25px 20px 3px 20px;
+    border-bottom: 1px solid transparent;
+    border-image: linear-gradient(0.25turn, rgba(255,249,34), rgba(255,0,128), rgba(56,2,155,0));
+    border-image-slice: 1;
+    width:50%;
+    margin-bottom: 5px;
+}
+
+.field i {
+    padding-left: 5px;
+    vertical-align: middle
+}
+
+.form-error{
+    color: red;
+}

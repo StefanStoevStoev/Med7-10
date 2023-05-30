@@ -1,0 +1,39 @@
+.user__details-edit {
+    text-align: center;
+    padding: 10px;
+    margin: 20px 0 18rem 0;
+    height: 250px;
+    width: 100%;
+    background-color:  var(--bg-color);
+    border: var(--info-border);
+}
+
+.user__details-edit img {
+    height: calc(12rem + 38px);
+    width: 250px;
+    float: left;
+    object-fit: cover;
+    object-position: 0% 40%;
+    border: var(--info-border);
+}
+
+.lbl {
+   float: right;
+   margin-right: 10px;
+}
+
+.spacing-table td {
+    padding: 10px 0px 0 5px;
+}
+
+.spacing-table td input {
+    font-size: 15px;
+    padding: 3px;
+}
+
+.btn-edit {
+    margin-top: 19px;
+}
+.img{
+    height: 11rem;
+}

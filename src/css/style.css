@@ -1,0 +1,280 @@
+@import url("./reset.css");
+@import url("./typography.css");
+@import url("./info.css");
+@import url("./products.css");
+@import url("./responsive.css");
+@import url("./login.css");
+@import url("./register.css");
+@import url("./sell.css");
+@import url("./user.css");
+@import url("./user-edit.css");
+@import url("./company.css");
+
+:root {
+  --info-border: 1px solid rgba(202, 193, 117, 0.5);
+  --bg-color: rgba(250, 250, 250, 0.8);
+  --btn-red: rgba(255, 0, 0, 0.3);
+  --btn-green: rgba(0, 255, 0, 0.3);
+}
+/* --bg-color: rgba(244, 244, 238, 0.8); */
+sub {
+  font-size: 10px;
+}
+
+div h4 {
+  font-size: 20px;
+  width: 100%;
+  text-align: center;
+  padding-bottom: 10px;
+}
+
+.button {
+  background-color: #ffa52f9b;
+  width: 60px;
+  bottom: 0px;
+  margin-bottom: 10px;
+  border: solid 1px rgb(96, 96, 96);
+}
+
+.button:hover {
+  background-color: #ffc9839b;
+  cursor: pointer;
+}
+
+html {
+  display: table;
+  margin: auto;
+}
+
+body {
+  max-width: 1200px;
+  background: url("../images/honeycomb-background.jpg");
+  background-size: 30%;
+  margin: 0 auto;
+  font-family: "Times New Roman", Times, serif;
+  letter-spacing: 0.1px;
+  line-height: 18px;
+}
+
+body::after {
+  content: "";
+  position: fixed;
+  z-index: -1;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  background-color: yellow;
+  opacity: 5%;
+  background-repeat: repeat;
+}
+
+.header {
+  background: url("https://images.unsplash.com/photo-1602449124229-c1114b1090d2?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1171&q=80");
+  background-repeat: no-repeat;
+  background-size: 100%;
+  background-position: 0 17%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-top: 20px;
+  background-color: white;
+  padding: 10rem 30px 20px 30px;
+  z-index: 10;
+  width: 1200px;
+}
+
+.header__home a,
+.header__prop a {
+  text-decoration: none;
+  color: white;
+  font-size: 18px;
+  letter-spacing: 1px;
+}
+
+.header__prop a {
+  margin-left: 2rem;
+}
+
+.header__login,
+.header_products {
+  text-shadow: 0 0 3px #3c5733, 0 0 5px #064301;
+}
+
+footer {
+  background-color: rgba(82, 85, 43, 1);
+  color: white;
+  text-align: center;
+  padding-bottom: 10px;
+}
+
+footer::before {
+  content: "";
+  border-top: 1px solid rgba(135, 140, 83, 0.7);
+  width: 80%;
+  display: block;
+  margin: 0 auto;
+  padding-bottom: 10px;
+}
+
+.SS {
+  color: red;
+  font-weight: 600;
+  margin: 16rem auto;
+  text-align: center;
+}
+
+/* Responsive design */
+@media screen and (max-width: 1100px) {
+
+  .sell__800 img,
+  .sell__10 img,
+  .sell__25 img,
+  .sell__p img,
+  .sell__pp img {
+      height: calc(12rem + 26px);
+      margin-bottom: 10px;
+  }
+
+  .sell__10-25,
+  .sell__25-p,
+  .sell__p-p {
+    display: block;
+  }
+
+  .sell__800,
+  .sell__10,
+  .sell__25,
+  .sell__p,
+  .sell__pp {
+    width: 70%;
+    margin-right: auto;
+    margin-left: auto;
+  }
+
+  .user__details {
+    display: flex; 
+    flex-direction: column;
+    margin-right: auto;
+    margin-left: auto;
+    align-items: center;
+    width: 90%;
+  }
+
+  .address-data,
+  .personal-data {
+    margin-left: 10px;
+      width: auto;
+  }
+  
+  .user__details-info{
+    display: flex;
+    text-align: center;
+  }
+
+  .user__details-info-personal {
+    order: -1;
+  }
+
+  .uuser__details-info-address {
+    order: 1;
+  }
+
+  .user__orders{
+    display: block; 
+}
+  .user__orders-800,
+  .user__orders-10 {
+      width: 60%;
+      margin-left: auto;
+      margin-right: auto;
+  }
+}
+
+@media screen and (max-width: 800px) {
+
+  .login,
+  .register {
+    width: 60%;
+  }
+
+  .sell__800,
+  .sell__10,
+  .sell__25,
+  .sell__p,
+  .sell__pp {
+    width: 80%;
+    margin-right: auto;
+    margin-left: auto;
+  }
+
+  .user__details-info {
+    display: block; 
+    flex-direction: column;
+  }
+
+  .user__details {
+    width: 80%;
+  }
+}
+
+@media screen and (max-width: 700px) {
+
+  .login,
+  .register {
+    width: 90%;
+  }
+
+  .sell__800,
+  .sell__10,
+  .sell__25,
+  .sell__p,
+  .sell__pp {
+    width: 100%;
+  }
+
+  .header {
+    display: block;
+    padding: 10px;
+  }
+
+  .header__prop a{
+    display: block;
+    margin-left: 0;
+  }
+
+  .user__details {
+    width: 100%;
+  }
+
+  .user__details-info{
+    padding: 0;
+  }
+
+  .user__orders-800,
+  .user__orders-10 {
+      width: 100%;
+  }
+}
+
+@media screen and (max-width: 350px) {
+  .sell__800 img,
+  .sell__10 img,
+  .sell__25 img,
+  .sell__p img,
+  .sell__pp img {
+    width: 100%;
+  }
+  .user__details img {
+    height: auto;
+    width: 100%;
+    justify-content: center;
+    object-fit: cover;
+    object-position: 0% 40%;
+  }
+
+  .user__details-info-personal,
+  .user__details-info-address {
+      padding: 16px 0;
+  }
+}
