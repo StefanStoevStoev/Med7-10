@@ -68,7 +68,7 @@ const productDelete = (orderDelete) => {
 };
 
   const userProducts = (productsData) => {
-    setOrderData({});
+    
     const userId = user.id;
     const productsId = productsData._id;
     const quantity = Number(productsData.quantity);
@@ -84,6 +84,7 @@ const productDelete = (orderDelete) => {
     }
 
     if (arrProductsId.find(element => element === productsId) === undefined) {
+      // setOrderData({});
       arrProductsId.push(productsId);
       setUserProductsEdit(productsData);
 

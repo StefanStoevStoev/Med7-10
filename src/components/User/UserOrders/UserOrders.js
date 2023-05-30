@@ -14,9 +14,11 @@ const UserOrders = () => {
     async function fetchProducts(productId, quantitNum) {
         let res;
         try {
+            console.log(1);
             if (!arr.find(x => x[0].id === productId)) {
                 res = await axios.post("http://localhost:5000/api/product/get", { productId })
                     .then((data) => {
+                        console.log(2);
                         const product = data.data[0];
                         product.quantity = quantitNum;
                         if (!arr.find(pp => pp.id === data?.data[0].id)) {
@@ -25,17 +27,16 @@ const UserOrders = () => {
                         return data.data;
                     })
                     .catch((error) => console.log(error));
+                    console.log(3);
                 arrProductsId.push(res[0].id);
                 
-                
+                setState(res);
+                arr.push(res);
             }
-
         } catch (err) {
             toast.error(err.response);
         }
-        setState(res);
-        arr.push(res);
-        console.log(res);
+        console.log(4);
     };
 
     useEffect(() => {
@@ -55,7 +56,7 @@ const UserOrders = () => {
         // };
     }, [orderData]);
     console.log(arr);
-    console.log(state);
+    // console.log(state);
     // useEffect(() => {
     // }, [arrNew]);
 
@@ -65,7 +66,7 @@ const UserOrders = () => {
 
     return (
         <>
-            {state.length > 0 ? arr.map(x =>
+            {arr.length > 0 ? arr.map(x =>
                 < form className="sell__10 sell-10" key={x[0].id}
                     name={x[0].id} >
                     <img
