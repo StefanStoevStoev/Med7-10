@@ -17,12 +17,11 @@ import Logout from "./components/Logout/Logout";
 import Register from "./components/Register/Register";
 import Sell from "./components/sell/Sell";
 import User from "./components/User/User";
-import UserDetails from "./components/User/UserDetails/UserDetails";
 
 import "./App.css";
 import { useLocalStorage } from './hooks/useLocalStorage';
 
-let arrProductsId = [];
+
 
 function App() {
   const [user, setUser] = useState([]);
@@ -33,39 +32,7 @@ function App() {
   let [userProductsEdit, setUserProductsEdit] = useState([]);
   const navigate = useNavigate();
 
-
-  useEffect(() => {
-
-  }, []);
-
-  async function deleteOrder(userId, productsId) {
-    try {
-        const res = await axios.post("http://localhost:5000/api/delete/order", {
-            userId,
-            productsId,
-        }).then(() => {
-        }).catch((err) => toast.error(err.response.data));
-    } catch (err) {
-        toast.error(err.response);
-    }
-};
-
-const productDelete = (orderDelete) => {
-    orderDelete.preventDefault();
-    const element = orderDelete.target.parentElement;
-    const userId = user.id;
-    const productsId = Number(element.getAttribute("name"));
-
-    console.log(orderData);
-
-    function remove(element) {
-        return element[0].id === productsId;
-    }
-    // console.log(arr);
-    orderData.filter(remove, productsId);
-
-    deleteOrder(userId, productsId);
-};
+  let arrProductsId = [];
 
   const userProducts = (productsData) => {
     
@@ -77,29 +44,32 @@ const productDelete = (orderDelete) => {
       fk_product_id: productsId,
       quantity: quantity
     }
-    if (orderData.length > 0) {
-      orderData.map(x => {
-        arrProductsId.push(x.fk_product_id);
-      });
-    }
 
-    if (arrProductsId.find(element => element === productsId) === undefined) {
+    // if (orderData.length > 0 && arrProductsId.find(element => element === productsId) !== productsId) {
+    //   console.log(arrProductsId);
+    //   orderData.map(x => {
+    //     arrProductsId.push(x.fk_product_id);
+    //   });
+    // }
+    
+    console.log(arrProductsId);
+    if (arrProductsId.find(element => element === productsId) !== productsId) {
       // setOrderData({});
       arrProductsId.push(productsId);
       setUserProductsEdit(productsData);
-
+      
       axios.post("http://localhost:5000/api/orders", {
         userId,
         productsId,
         quantity,
       }).then(() => {
-        console.log(orderData);
+        // console.log(orderData);
         setOrderData(dataOrder);
-        console.log(orderData);
+        // console.log(orderData);
       }).catch((err) => toast.error(err.response.data));
       navigate(`/users/${userId}`);
     }
-    console.log(orderData);
+    // console.log(orderData);
   };
 
   const userLogin = (authData) => {
@@ -147,7 +117,8 @@ const productDelete = (orderDelete) => {
         {
           user,
           orderData,
-          productDelete,
+          setOrderData,
+          arrProductsId,
           userProductsEdit,
           arrProductsId,
           userProducts,
