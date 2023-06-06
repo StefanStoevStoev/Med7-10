@@ -4,40 +4,12 @@ import { toast } from "react-toastify";
 
 import { AuthContext } from "../../../contexts/AuthContext";
 let arr = [];
-let arrProductsId = [];
 
 const UserOrders = () => {
-    const { orderData, productDelete } = useContext(AuthContext);
+    const { user, orderData, setOrderData, arrProductsId } = useContext(AuthContext);
     const [state, setState] = useState([]);
-    // const [arrNew, setArrNew] = useState([]);
-
-    async function fetchProducts(productId, quantitNum) {
-        let res;
-        try {
-            console.log(1);
-            if (!arr.find(x => x[0].id === productId)) {
-                res = await axios.post("http://localhost:5000/api/product/get", { productId })
-                    .then((data) => {
-                        console.log(2);
-                        const product = data.data[0];
-                        product.quantity = quantitNum;
-                        if (!arr.find(pp => pp.id === data?.data[0].id)) {
-                            // setState(product);
-                        }
-                        return data.data;
-                    })
-                    .catch((error) => console.log(error));
-                    console.log(3);
-                arrProductsId.push(res[0].id);
-                
-                setState(res);
-                arr.push(res);
-            }
-        } catch (err) {
-            toast.error(err.response);
-        }
-        console.log(4);
-    };
+    const [order, setOrder] = useState(false);
+    let bool = false;
 
     useEffect(() => {
         if (orderData.length > 0) {
@@ -49,20 +21,73 @@ const UserOrders = () => {
         } else if (orderData.fk_users_id !== undefined) {
             setState(fetchProducts(orderData.fk_product_id, orderData.quantity));
         }
-        // setState(arr);
-        // console.log(state);
-        // if ( typeof orderData === 'object'){
-        //     orderData = {};
-        // };
     }, [orderData]);
-    console.log(arr);
-    // console.log(state);
-    // useEffect(() => {
-    // }, [arrNew]);
+    // console.log(arr);
 
-    const orderProduct = () => {
-
+    async function deleteOrder(userId, productsId) {
+        try {
+            const res = await axios.post("http://localhost:5000/api/delete/order", {
+                userId,
+                productsId,
+            }).then(() => {
+            }).catch((err) => toast.error(err.response.data));
+        } catch (err) {
+            toast.error(err.response);
+        }
     };
+
+    const orderProduct = (e) => {
+        e.preventDefault();
+        // console.log(1);
+        setOrder(true);
+        // navigate(`/users/${user.id}`);
+    };
+
+    const productDelete = (orderDelete) => {
+        orderDelete.preventDefault();
+        const element = orderDelete.target.parentElement;
+        const userId = user.id;
+        const productsId = Number(element.getAttribute("name"));
+
+        function remove(e) {
+            return e.fk_product_id !== productsId;
+        }
+
+        if (orderData.length > 0) {
+            orderData.filter(remove, productsId);
+        } else {
+            setOrderData({});
+        }
+
+        deleteOrder(userId, productsId);
+        arr = arr.filter(x => x[0].id !== productsId);
+        arrProductsId.filter(x => x !== productsId);
+    };
+
+    async function fetchProducts(productId, quantitNum) {
+        let res;
+        try {
+            if (!arr.find(x => x[0].id === productId)) {
+                res = await axios.post("http://localhost:5000/api/product/get", { productId })
+                    .then((data) => {
+                        const product = data.data[0];
+                        product.quantity = quantitNum;
+                        if (!arr.find(pp => pp.id === data?.data[0].id)) {
+                            // setState(product);
+                        }
+                        return data.data;
+                    })
+                    .catch((error) => console.log(error));
+                arrProductsId.push(res[0].id);
+
+                setState(res);
+                arr.push(res);
+            }
+        } catch (err) {
+            toast.error(err.response);
+        }
+    };
+
 
     return (
         <>
@@ -109,6 +134,7 @@ const UserOrders = () => {
                     Нямате поръчки
                 </h3>
             }
+            {order ? <h2 className="user-ordered">Поръчката ви е приета, ще се свържем с вас за потвърждаване на заявката.</h2> : ''}
         </>
     );
 }

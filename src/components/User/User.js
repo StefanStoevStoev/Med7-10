@@ -1,15 +1,26 @@
 import { useState, useContext } from "react";
+import { Routes, Route, useNavigate } from 'react-router-dom';
 
 import { AuthContext } from "../../contexts/AuthContext";
-import uniqid from 'uniqid';
+
 
 import UserDetails from "./UserDetails/UserDetails";
 import UserOrders from "./UserOrders/UserOrders";
+import CreateUserData from "./CreateUser/CreateUserData";
 
 const User = () => {
-    const [products, setProducts] = useState([]);
-    const { user } = useContext(AuthContext);
+    const { user, authEdit } = useContext(AuthContext);
+    // const [authEdit, setAuthEdit] = useState([]);
+    // let [edit, setEdit] = useState();
+    const navigate = useNavigate();
+    let bool = true;
+    // console.log(userEdit);
+    const userEdit = (userEditData) => {
+        bool = false;
+        console.log(userEditData);
+        // setAuthEdit(userEditData);
 
+    };
     // const addProductToUser = (productData) => {
     //     console.log(productData);
     //     setProducts(state => [
@@ -22,14 +33,26 @@ const User = () => {
     // };
 
     return (
-        <section className="user">
-            <UserDetails />
-            { user.id ?
-                <div className="user__orders" >
-                    <UserOrders />
-                </div> : ''
-            }
 
+        <section className="user">
+
+
+            {user.id ?
+                <div className="user__orders" >
+                    {bool ?
+                        <>
+                            <UserDetails authEdit={authEdit} />
+                            <UserOrders />
+                        </>
+                        :
+                        <>
+                            <CreateUserData />
+                            <UserOrders />
+                        </>
+                    }
+                </div> : ''
+
+            }
         </section>
     );
 }
