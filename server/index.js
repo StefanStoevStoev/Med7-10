@@ -17,23 +17,16 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.post("/api/product/get", (req, res) => {
     const id = req.body.productId;
-    // console.log(typeof req.body.x);
     const sqlGet = "SELECT * FROM med7.products WHERE id = (?)";
     db.query(sqlGet, [id], (error, result) => {
 
         if (error) {
             return res.json("Error");
         }
-        // console.log(res.json(result));
-        // console.log(result);
         return res.json(result);
     });
 
 });
-
-// app.get("/", (req, res) => {
-//     res.send("");
-// });
 
 app.post("/api/post", (req, res) => {
     const { email, password } = req.body;
@@ -67,7 +60,6 @@ app.post("/api/orders", (req, res) => {
         if (error) {
             return res.json("Error");
         }
-        // console.log(res.json(result));
         return res.json(result);
     });
 });
@@ -82,16 +74,63 @@ app.post("/api/orders/get", (req, res) => {
         if (error) {
             return res.json("Error");
         }
+        return res.json(result);
+    });
+});
+
+app.post("/api/user/get", (req, res) => {
+    const id = req.body.userId;
+    // console.log(id);
+
+    const sqlInsert = "SELECT * FROM med7.users WHERE id = (?)";
+
+    db.query(sqlInsert, [id], (error, result) => {
+        if (error) {
+            return res.json("Error");
+        }
         // console.log(result);
         // console.log(res.json(result));
         return res.json(result);
         // return result;
-        // console.log(result);
-        //  console.log(error);
     });
     // console.log(dd);
 });
 
+app.post("/api/user/update", (req, res) => {
+    const name = req.body.userData.name;
+    const family_name = req.body.userData.family_name;
+    const phone = req.body.userData.phone;
+    const city = req.body.userData.city;
+    const street = req.body.userData.street;
+    const street_number = Number(req.body.userData.street_number);
+    const picture = req.body.userData.picture;
+    const id = req.body.userData.id;
+
+    // if(street_number = )
+    
+    // console.log(req.body.userData);
+    // console.log(city);
+    // console.log(family);
+    // console.log(picture);
+    // console.log(name);
+    // console.log(number);
+    // console.log(phone);
+    // console.log(street);
+
+    const sqlInsert = "UPDATE med7.users SET name = (?), family_name = (?), phone = (?), city = (?), street = (?), street_number = (?), picture = (?) WHERE id = (?)";
+
+    db.query(sqlInsert, [name, family_name, phone, city, street, street_number, picture, id], (error, result) => {
+        if (error) {
+            console.log(error);
+            return res.json("Error");
+        }
+        console.log(result);
+        // console.log(res.json(result));
+        return res.json(result);
+        // return result;
+    });
+    // console.log(dd);
+});
 app.put("/api/post", (req, res) => {
     const { email, password } = req.body;
     const sqlInsert = "INSERT INTO med7.users (email, password) VALUES (?, ?)";

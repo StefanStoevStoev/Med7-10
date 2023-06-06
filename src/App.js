@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Routes, Route, useNavigate } from 'react-router-dom';
 import axios from "axios";
 import { toast } from "react-toastify";
@@ -19,23 +19,26 @@ import Sell from "./components/sell/Sell";
 import User from "./components/User/User";
 
 import "./App.css";
-import { useLocalStorage } from './hooks/useLocalStorage';
-
-
+// import { useLocalStorage } from './hooks/useLocalStorage';
 
 function App() {
   const [user, setUser] = useState([]);
-  const [auth, setAuth] = useLocalStorage('auth', {});
+  // const [auth, setAuth] = useLocalStorage('auth', {});
   let [orderData, setOrderData] = useState({});
-
-  const [authEdit, setAuthEdit] = useState([]);
   let [userProductsEdit, setUserProductsEdit] = useState([]);
+  const [authEdit, setAuthEdit] = useState([]);
   const navigate = useNavigate();
 
   let arrProductsId = [];
+  const userId = user.id;
+  let image = '';
+
+  useEffect(() => {
+    const papa = userDetails(userId);
+  }, [user]);
 
   const userProducts = (productsData) => {
-    
+
     const userId = user.id;
     const productsId = productsData._id;
     const quantity = Number(productsData.quantity);
@@ -45,36 +48,25 @@ function App() {
       quantity: quantity
     }
 
-    // if (orderData.length > 0 && arrProductsId.find(element => element === productsId) !== productsId) {
-    //   console.log(arrProductsId);
-    //   orderData.map(x => {
-    //     arrProductsId.push(x.fk_product_id);
-    //   });
-    // }
-    
     console.log(arrProductsId);
     if (arrProductsId.find(element => element === productsId) !== productsId) {
-      // setOrderData({});
       arrProductsId.push(productsId);
       setUserProductsEdit(productsData);
-      
+
       axios.post("http://localhost:5000/api/orders", {
         userId,
         productsId,
         quantity,
       }).then(() => {
-        // console.log(orderData);
         setOrderData(dataOrder);
-        // console.log(orderData);
       }).catch((err) => toast.error(err.response.data));
       navigate(`/users/${userId}`);
     }
-    // console.log(orderData);
   };
 
   const userLogin = (authData) => {
     setUser(authData);
-    setAuth(authData);
+    // setAuth(authData);
     const fetchOrders = async () => {
       const userId = authData.id;
       try {
@@ -89,18 +81,30 @@ function App() {
 
   const userRemove = () => {
     setUser([]);
-    setAuth({});
+    // setAuth({});
   }
 
   const userLogout = () => {
     setUser([]);
-    setAuth({});
+    // setAuth({});
     navigate('/');
   };
 
-  const userEdit = (userEditData) => {
 
-    setAuthEdit(userEditData);
+
+  async function userDetails(userId) {
+    try {
+      const res = await axios.post("http://localhost:5000/api/user/get", {
+        userId,
+      }).then((data) => {
+        console.log(data.data);
+        setAuthEdit(data.data[0]);
+        // setCurrentUser(data.data);
+        return data.data[0];
+      }).catch((err) => toast.error(err.response.data));
+    } catch (err) {
+      toast.error(err.response);
+    }
   };
 
   const addUserData = (userData) => {
@@ -116,6 +120,8 @@ function App() {
       AuthContext.Provider value={
         {
           user,
+          authEdit,
+          setAuthEdit,
           orderData,
           setOrderData,
           arrProductsId,
@@ -124,8 +130,6 @@ function App() {
           userProducts,
           userLogin,
           userLogout,
-          userEdit,
-          authEdit,
           userRemove,
         }
       }
@@ -139,14 +143,14 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/404" element={<NotFound />} />
-        <Route path="/users/:userId" element={(
+        <Route path="/users/:userId/*" element={(
           <PrivateRoute>
             <User auth={user} userProductsEdit={userProductsEdit} />
           </PrivateRoute>
         )} />
         {/* <Route path="/users/*" element={<UserDetails userRemove={userRemove} />} /> */}
         <Route path="/logout" element={<Logout />} />
-        <Route path="/jsonstore/:userId/edit" element={<CreateUserData addUserData={addUserData} />} />
+        <Route path="/users/:userId/edit" element={<CreateUserData addUserData={addUserData} />} />
       </Routes>
       <footer>© 2023 Пчелни продукти. Всички права са запазени.</footer>
     </

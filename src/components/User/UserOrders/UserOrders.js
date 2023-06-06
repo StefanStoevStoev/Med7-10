@@ -4,12 +4,12 @@ import { toast } from "react-toastify";
 
 import { AuthContext } from "../../../contexts/AuthContext";
 let arr = [];
-let arrProductsId = [];
 
 const UserOrders = () => {
     const { user, orderData, setOrderData, arrProductsId } = useContext(AuthContext);
     const [state, setState] = useState([]);
-    // const [arrNew, setArrNew] = useState([]);
+    const [order, setOrder] = useState(false);
+    let bool = false;
 
     useEffect(() => {
         if (orderData.length > 0) {
@@ -36,6 +36,13 @@ const UserOrders = () => {
         }
     };
 
+    const orderProduct = (e) => {
+        e.preventDefault();
+        // console.log(1);
+        setOrder(true);
+        // navigate(`/users/${user.id}`);
+    };
+
     const productDelete = (orderDelete) => {
         orderDelete.preventDefault();
         const element = orderDelete.target.parentElement;
@@ -45,21 +52,16 @@ const UserOrders = () => {
         function remove(e) {
             return e.fk_product_id !== productsId;
         }
-        
+
         if (orderData.length > 0) {
             orderData.filter(remove, productsId);
         } else {
-            // console.log(orderData);
             setOrderData({});
         }
 
         deleteOrder(userId, productsId);
-        console.log(orderData);
         arr = arr.filter(x => x[0].id !== productsId);
-        arrProductsId.filter(x => 
-            x !== productsId
-        );
-        console.log(arr);
+        arrProductsId.filter(x => x !== productsId);
     };
 
     async function fetchProducts(productId, quantitNum) {
@@ -86,9 +88,6 @@ const UserOrders = () => {
         }
     };
 
-    const orderProduct = () => {
-
-    };
 
     return (
         <>
@@ -135,6 +134,7 @@ const UserOrders = () => {
                     Нямате поръчки
                 </h3>
             }
+            {order ? <h2 className="user-ordered">Поръчката ви е приета, ще се свържем с вас за потвърждаване на заявката.</h2> : ''}
         </>
     );
 }

@@ -9,15 +9,16 @@ const Logout = () => {
     const { user, userLogout } = useContext(AuthContext);
 
   useEffect(() => {
-    authService
-      .logout(user.accsessToken)
-      .then(() => {
-        userLogout();
-        navigate("/");
-      })
-      .catch(() => {
-        navigate("/");
-      });
+    userLogout();
+    // authService
+    //   .logout(user.id)
+    //   .then(() => {
+    //     userLogout();
+    //     navigate("/");
+    //   })
+    //   .catch(() => {
+    //     navigate("/");
+    //   });
   });
   return null;
 };
