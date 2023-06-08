@@ -9,9 +9,9 @@ const UserOrders = () => {
     const { user, orderData, setOrderData, arrProductsId } = useContext(AuthContext);
     const [state, setState] = useState([]);
     const [order, setOrder] = useState(false);
-    let bool = false;
 
     useEffect(() => {
+        console.log(arrProductsId);
         if (orderData.length > 0) {
             orderData.map((x) => {
                 if (!arrProductsId.find(pp => pp === x.fk_product_id)) {
@@ -21,12 +21,12 @@ const UserOrders = () => {
         } else if (orderData.fk_users_id !== undefined) {
             setState(fetchProducts(orderData.fk_product_id, orderData.quantity));
         }
+        console.log(orderData);
     }, [orderData]);
-    // console.log(arr);
 
     async function deleteOrder(userId, productsId) {
         try {
-            const res = await axios.post("http://localhost:5000/api/delete/order", {
+            await axios.post("http://localhost:5000/api/delete/order", {
                 userId,
                 productsId,
             }).then(() => {
@@ -87,7 +87,6 @@ const UserOrders = () => {
             toast.error(err.response);
         }
     };
-
 
     return (
         <>

@@ -16,12 +16,9 @@ const CreateUserData = () => {
     try {
       const res = await axios.post("http://localhost:5000/api/user/update", { userData })
         .then((data) => {
-          // const product = data.data[0];
-          // console.log(data.data);
           return data.data;
         })
         .catch((error) => console.log(error));
-        // console.log(res);
     } catch (err) {
       toast.error(err.response);
     }
@@ -38,8 +35,6 @@ const CreateUserData = () => {
     const form = document.querySelector(".form");
     const submitter = document.querySelector(".btn-edit");
 
-    // console.log(submitter);
-
     let userData = Object.fromEntries(new FormData(form, submitter));
 
     if (user.picture === "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ7g2MhQxCyhB-EYgYLpBqPTk_z3TrBZmEKww&usqp=CAU" || user.picture === undefined) {
@@ -50,18 +45,11 @@ const CreateUserData = () => {
 
     userData.id = userId;
     setAuthEdit(userData);
-    // console.log(userData);
+
     updateUserDetails(userData);
     navigate(`/users/${user.id}`);
     return userData;
   };
-
-  // updateUserDetails(authEdit);
-
-
-// console.log(authEdit);
-  // updateUserDetails(user);
-  // updateUserDetails(getUserData);
 
   return (
     <div className="user__details-edit">

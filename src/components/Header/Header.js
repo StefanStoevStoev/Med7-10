@@ -12,6 +12,11 @@ const Header = () => {
         <Link to="/" >Начало</Link>
       </div>
       <div className="header__prop">
+      {user.role === 1 && (
+          <Link className="header_hello" to={`/admin/${user.id}`}>
+             Администратор
+          </Link>
+        )}
         {user.email && (
           <Link className="header_hello" to={`/users/${user.id}`}>
             Здравейте {user.email}!

@@ -8,6 +8,7 @@ import { AuthContext } from './contexts/AuthContext';
 import CreateUserData from './components/User/CreateUser/CreateUserData';
 import PrivateRoute from './components/common/PrivateRouther';
 
+import Admin from './components/Admin/Admin';
 import Home from "./components/Home/Home"
 import Company from './components/Company/Company';
 import Header from "./components/Header/Header";
@@ -38,6 +39,7 @@ function App() {
   }, [user]);
 
   const userProducts = (productsData) => {
+    console.log(productsData);
 
     const userId = user.id;
     const productsId = productsData._id;
@@ -86,11 +88,13 @@ function App() {
 
   const userLogout = () => {
     setUser([]);
+    // arrProductsId = [];
     // setAuth({});
+    // setOrderData({});
+    // setUserProductsEdit([]);
+    setOrderData({});
     navigate('/');
   };
-
-
 
   async function userDetails(userId) {
     try {
@@ -138,6 +142,11 @@ function App() {
       <Routes>
 
         <Route path="/" element={<Home />} />
+        <Route path="/admin/:userId" element={(
+          <PrivateRoute>
+            <Admin auth={user} userProductsEdit={userProductsEdit} />
+          </PrivateRoute>
+        )} />
         <Route path="/company" element={<Company />} />
         <Route path="/products" element={<Sell />} />
         <Route path="/login" element={<Login />} />
@@ -145,10 +154,9 @@ function App() {
         <Route path="/404" element={<NotFound />} />
         <Route path="/users/:userId/*" element={(
           <PrivateRoute>
-            <User auth={user} userProductsEdit={userProductsEdit} />
+            <User />
           </PrivateRoute>
         )} />
-        {/* <Route path="/users/*" element={<UserDetails userRemove={userRemove} />} /> */}
         <Route path="/logout" element={<Logout />} />
         <Route path="/users/:userId/edit" element={<CreateUserData addUserData={addUserData} />} />
       </Routes>

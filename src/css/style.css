@@ -9,6 +9,7 @@
 @import url("./user.css");
 @import url("./user-edit.css");
 @import url("./company.css");
+@import url("./admin.css");
 
 :root {
   --info-border: 1px solid rgba(202, 193, 117, 0.5);

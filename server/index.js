@@ -106,17 +106,6 @@ app.post("/api/user/update", (req, res) => {
     const picture = req.body.userData.picture;
     const id = req.body.userData.id;
 
-    // if(street_number = )
-    
-    // console.log(req.body.userData);
-    // console.log(city);
-    // console.log(family);
-    // console.log(picture);
-    // console.log(name);
-    // console.log(number);
-    // console.log(phone);
-    // console.log(street);
-
     const sqlInsert = "UPDATE med7.users SET name = (?), family_name = (?), phone = (?), city = (?), street = (?), street_number = (?), picture = (?) WHERE id = (?)";
 
     db.query(sqlInsert, [name, family_name, phone, city, street, street_number, picture, id], (error, result) => {
@@ -124,13 +113,28 @@ app.post("/api/user/update", (req, res) => {
             console.log(error);
             return res.json("Error");
         }
+        return res.json(result);
+    });
+});
+
+app.post("/api/user/delete", (req, res) => {
+    const is_active = req.body.userData.is_active;
+
+    console.log(is_active);
+
+    const sqlInsert = "UPDATE med7.users SET is_active = false WHERE id = (?)";
+
+    db.query(sqlInsert, [is_active, id], (error, result) => {
+        if (error) {
+            console.log(error);
+            return res.json("Error");
+        }
         console.log(result);
         // console.log(res.json(result));
         return res.json(result);
-        // return result;
     });
-    // console.log(dd);
 });
+
 app.put("/api/post", (req, res) => {
     const { email, password } = req.body;
     const sqlInsert = "INSERT INTO med7.users (email, password) VALUES (?, ?)";
