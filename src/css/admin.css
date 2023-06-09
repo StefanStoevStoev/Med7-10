@@ -1,0 +1,36 @@
+.admin{
+    margin: 20px 0 20px 0;
+}
+
+.admin__header{
+    display: flex;
+    justify-content: space-between;
+}
+
+.bttn-users,
+.bttn-order{
+    width: 49%;
+    height: 40px;
+    color: rgb(45, 43, 40);
+    font-size: 16px;
+    border: solid 1px rgb(111, 111, 111);
+    /* border: var(--info-border); */
+}
+
+.bttn-order{
+    background-color: #ffa52f9b;
+}
+
+.bttn-users{
+    background-color: #14684b9b;
+}
+
+.bttn-order:hover {
+    background-color: #ffc9839b;
+    cursor: pointer;
+}
+
+.bttn-users:hover {
+    background-color: #3e74619b;
+    cursor: pointer;
+}
