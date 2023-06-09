@@ -21,6 +21,7 @@ import User from "./components/User/User";
 
 import "./App.css";
 // import { useLocalStorage } from './hooks/useLocalStorage';
+let arrProductsId = [];
 
 function App() {
   const [user, setUser] = useState([]);
@@ -30,7 +31,7 @@ function App() {
   const [authEdit, setAuthEdit] = useState([]);
   const navigate = useNavigate();
 
-  let arrProductsId = [];
+
   const userId = user.id;
   let image = '';
 
@@ -51,8 +52,13 @@ function App() {
     }
 
     console.log(arrProductsId);
+    console.log(productsId);
+    console.log(arrProductsId.find(element => element === productsId));
+
     if (arrProductsId.find(element => element === productsId) !== productsId) {
       arrProductsId.push(productsId);
+      console.log(productsId);
+      console.log(arrProductsId);
       setUserProductsEdit(productsData);
 
       axios.post("http://localhost:5000/api/orders", {
@@ -61,7 +67,7 @@ function App() {
         quantity,
       }).then(() => {
         setOrderData(dataOrder);
-      }).catch((err) => toast.error(err.response.data));
+      }).catch((err) => toast.error(err.response));
       navigate(`/users/${userId}`);
     }
   };
@@ -101,7 +107,7 @@ function App() {
       const res = await axios.post("http://localhost:5000/api/user/get", {
         userId,
       }).then((data) => {
-        console.log(data.data);
+        // console.log(data.data);
         setAuthEdit(data.data[0]);
         // setCurrentUser(data.data);
         return data.data[0];

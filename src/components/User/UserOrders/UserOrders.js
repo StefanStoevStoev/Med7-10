@@ -5,24 +5,32 @@ import { toast } from "react-toastify";
 import { AuthContext } from "../../../contexts/AuthContext";
 let arr = [];
 
+
 const UserOrders = () => {
-    const { user, orderData, setOrderData, arrProductsId } = useContext(AuthContext);
+    let { user, orderData, setOrderData, arrProductsId } = useContext(AuthContext);
     const [state, setState] = useState([]);
     const [order, setOrder] = useState(false);
+    let product = 0;
 
     useEffect(() => {
-        console.log(arrProductsId);
         if (orderData.length > 0) {
             orderData.map((x) => {
                 if (!arrProductsId.find(pp => pp === x.fk_product_id)) {
                     setState(fetchProducts(x.fk_product_id, x.quantity));
                 }
             })
-        } else if (orderData.fk_users_id !== undefined) {
+        } else if (orderData.fk_users_id !== undefined ) {
             setState(fetchProducts(orderData.fk_product_id, orderData.quantity));
         }
-        console.log(orderData);
     }, [orderData]);
+
+    useEffect(() => {
+        console.log(6);
+        if(arr.length > 0 && product !== 0){
+            console.log(7);
+            arr = arr.filter(x => x[0].id !== product);
+        }
+    }, [arrProductsId]);
 
     async function deleteOrder(userId, productsId) {
         try {
@@ -48,20 +56,26 @@ const UserOrders = () => {
         const element = orderDelete.target.parentElement;
         const userId = user.id;
         const productsId = Number(element.getAttribute("name"));
+        product = productsId;
+
+        console.log(1);
 
         function remove(e) {
+            console.log(2);
             return e.fk_product_id !== productsId;
         }
 
         if (orderData.length > 0) {
+            console.log(3);
             orderData.filter(remove, productsId);
         } else {
+            console.log(4);
             setOrderData({});
         }
-
+        console.log(5);
         deleteOrder(userId, productsId);
         arr = arr.filter(x => x[0].id !== productsId);
-        arrProductsId.filter(x => x !== productsId);
+        arrProductsId = arrProductsId.filter(x => x !== productsId);
     };
 
     async function fetchProducts(productId, quantitNum) {
@@ -78,7 +92,7 @@ const UserOrders = () => {
                         return data.data;
                     })
                     .catch((error) => console.log(error));
-                arrProductsId.push(res[0].id);
+                // arrProductsId.push(res[0].id);
 
                 setState(res);
                 arr.push(res);

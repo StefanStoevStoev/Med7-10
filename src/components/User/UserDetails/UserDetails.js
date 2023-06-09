@@ -28,21 +28,13 @@ const UserDetails = ({userEdit}) => {
     }
   };
 
-  useEffect(()=> {
-    // console.log(authEdit);
-    if(authEdit.length === 0){
-      // console.log(userDetails(user.id));
-      // setCurrentUser(userDetails(user.id));
-      console.log(currentUser);
+  // useEffect(()=> {
+  //   if(authEdit.length === 0){
+  //     console.log(currentUser);
       
-    };
-  },[]);
+  //   };
+  // },[]);
 
-  console.log(user);
-  // console.log(authEdit);
-
-  // authEdit = currentUser;
-// console.log(currentUser);
   const onClick = (e) => {
     e.preventDefault();
     <CreateUserData userEdit={userEdit}/>
