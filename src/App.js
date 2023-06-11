@@ -29,18 +29,19 @@ function App() {
   let [orderData, setOrderData] = useState({});
   let [userProductsEdit, setUserProductsEdit] = useState([]);
   const [authEdit, setAuthEdit] = useState([]);
+  const [products, setProducts] = useState([]);
   const navigate = useNavigate();
-
 
   const userId = user.id;
   let image = '';
 
   useEffect(() => {
     const papa = userDetails(userId);
-  }, [user]);
+    console.log(products);
+  }, [user, products]);
 
   const userProducts = (productsData) => {
-    console.log(productsData);
+    // console.log(productsData);
 
     const userId = user.id;
     const productsId = productsData._id;
@@ -51,14 +52,8 @@ function App() {
       quantity: quantity
     }
 
-    console.log(arrProductsId);
-    console.log(productsId);
-    console.log(arrProductsId.find(element => element === productsId));
-
-    if (arrProductsId.find(element => element === productsId) !== productsId) {
+    if (products.find(element => element === productsId) !== productsId) {
       arrProductsId.push(productsId);
-      console.log(productsId);
-      console.log(arrProductsId);
       setUserProductsEdit(productsData);
 
       axios.post("http://localhost:5000/api/orders", {
@@ -71,7 +66,7 @@ function App() {
       navigate(`/users/${userId}`);
     }
   };
-
+  // console.log(products);
   const userLogin = (authData) => {
     setUser(authData);
     // setAuth(authData);
@@ -94,7 +89,6 @@ function App() {
 
   const userLogout = () => {
     setUser([]);
-    // arrProductsId = [];
     // setAuth({});
     // setOrderData({});
     // setUserProductsEdit([]);
@@ -132,11 +126,12 @@ function App() {
           user,
           authEdit,
           setAuthEdit,
+          setProducts,
+          products,
           orderData,
           setOrderData,
           arrProductsId,
           userProductsEdit,
-          arrProductsId,
           userProducts,
           userLogin,
           userLogout,
