@@ -4,33 +4,33 @@ import { toast } from "react-toastify";
 
 import { AuthContext } from "../../../contexts/AuthContext";
 let arr = [];
+let arrProducts = [];
 
 
 const UserOrders = () => {
-    let { user, orderData, setOrderData, arrProductsId } = useContext(AuthContext);
+    let { user, orderData, setOrderData, arrProductsId, setProducts, products } = useContext(AuthContext);
     const [state, setState] = useState([]);
     const [order, setOrder] = useState(false);
-    let product = 0;
+    let temporaryProduct = 0;
 
     useEffect(() => {
         if (orderData.length > 0) {
             orderData.map((x) => {
-                if (!arrProductsId.find(pp => pp === x.fk_product_id)) {
+                if (!products.find(pp => pp === x.fk_product_id)) {
                     setState(fetchProducts(x.fk_product_id, x.quantity));
                 }
             })
         } else if (orderData.fk_users_id !== undefined ) {
             setState(fetchProducts(orderData.fk_product_id, orderData.quantity));
-        }
+        };
     }, [orderData]);
 
     useEffect(() => {
-        console.log(6);
-        if(arr.length > 0 && product !== 0){
-            console.log(7);
-            arr = arr.filter(x => x[0].id !== product);
+        if(arr.length > 0 && temporaryProduct !== 0){
+            arr = arr.filter(x => x[0].id !== temporaryProduct);
         }
-    }, [arrProductsId]);
+        arrProducts = arrProducts.filter(x => x !== temporaryProduct);
+    }, [arrProducts]);
 
     async function deleteOrder(userId, productsId) {
         try {
@@ -46,7 +46,6 @@ const UserOrders = () => {
 
     const orderProduct = (e) => {
         e.preventDefault();
-        // console.log(1);
         setOrder(true);
         // navigate(`/users/${user.id}`);
     };
@@ -56,26 +55,24 @@ const UserOrders = () => {
         const element = orderDelete.target.parentElement;
         const userId = user.id;
         const productsId = Number(element.getAttribute("name"));
-        product = productsId;
-
-        console.log(1);
+        temporaryProduct = productsId;
 
         function remove(e) {
-            console.log(2);
             return e.fk_product_id !== productsId;
         }
 
         if (orderData.length > 0) {
-            console.log(3);
             orderData.filter(remove, productsId);
+            arrProducts = arrProducts.filter(x => x !== temporaryProduct);
         } else {
-            console.log(4);
             setOrderData({});
+            arrProducts = [];
         }
-        console.log(5);
         deleteOrder(userId, productsId);
         arr = arr.filter(x => x[0].id !== productsId);
-        arrProductsId = arrProductsId.filter(x => x !== productsId);
+        // arrProducts = arrProducts.filter(x => x !== productsId);
+        setProducts(arrProducts);
+
     };
 
     async function fetchProducts(productId, quantitNum) {
@@ -84,8 +81,8 @@ const UserOrders = () => {
             if (!arr.find(x => x[0].id === productId)) {
                 res = await axios.post("http://localhost:5000/api/product/get", { productId })
                     .then((data) => {
-                        const product = data.data[0];
-                        product.quantity = quantitNum;
+                        const prod = data.data[0];
+                        prod.quantity = quantitNum;
                         if (!arr.find(pp => pp.id === data?.data[0].id)) {
                             // setState(product);
                         }
@@ -95,13 +92,17 @@ const UserOrders = () => {
                 // arrProductsId.push(res[0].id);
 
                 setState(res);
+                arrProducts.push(res[0].id);
                 arr.push(res);
             }
         } catch (err) {
             toast.error(err.response);
         }
+        // console.log(arrProducts);
+        setProducts(arrProducts);
+        // console.log(products);
     };
-
+    // console.log(products);
     return (
         <>
             {arr.length > 0 ? arr.map(x =>
