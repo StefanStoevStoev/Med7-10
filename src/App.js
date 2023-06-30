@@ -22,6 +22,7 @@ import User from "./components/User/User";
 import "./App.css";
 // import { useLocalStorage } from './hooks/useLocalStorage';
 let arrProductsId = [];
+let temporaryOrderData = [];
 
 function App() {
   const [user, setUser] = useState([]);
@@ -40,27 +41,66 @@ function App() {
     console.log(products);
   }, [user, products]);
 
+  async function updateNonConfirmedOrder( quantity, userId, productId) {
+    console.log(orderData);
+    if (orderData.length > 0 && orderData.find(x => {
+      return x.fk_product_id === Number(productId) && x.confirmed === 0
+    })) {
+      let res;
+      try {
+        res = await axios.post("http://localhost:5000/api/order/update/nco", { quantity, userId, productId })
+          .then((data) => {
+            console.log(data.data);
+            orderData.forEach((x, index) => {
+              if(x.fk_product_id === productId ) {
+                  x[index].quantity = quantity;
+              }
+          });
+            return data.data;
+          })
+          .catch((error) => console.log(error));
+      } catch (err) {
+        toast.error(err.response);
+      }
+    };
+  };
+
   const userProducts = (productsData) => {
-    // console.log(productsData);
+    console.log(productsData);
+    console.log(orderData);
 
     const userId = user.id;
     const productsId = productsData._id;
     const quantity = Number(productsData.quantity);
+    const dateTime = new Date().toISOString().slice(0, 19).replace('T', ' ');
     let dataOrder = {
       fk_users_id: userId,
       fk_product_id: productsId,
-      quantity: quantity
+      quantity: quantity,
+      date: dateTime,
+      confirmed: 0,
     }
 
-    if (products.find(element => element === productsId) !== productsId) {
+    if (orderData.length > 0 && orderData.find(x => x.fk_product_id === productsId && x.confirmed === 0)) {
+      updateNonConfirmedOrder( quantity, userId, productsId);
+      // setUserProductsEdit(productsData);
+      // arrProductsId.push(productsId);
+      console.log(orderData);
+      // setOrderData(dataOrder);
+      navigate(`/users/${userId}`);
+    } else {
       arrProductsId.push(productsId);
       setUserProductsEdit(productsData);
+      // console.log(userProductsEdit);
 
-      axios.post("http://localhost:5000/api/orders", {
+      axios.post("http://localhost:5000/api/orders/insert", {
         userId,
         productsId,
         quantity,
-      }).then(() => {
+      }).then((data) => {
+
+        temporaryOrderData.push(dataOrder);
+        console.log(temporaryOrderData);
         setOrderData(dataOrder);
       }).catch((err) => toast.error(err.response));
       navigate(`/users/${userId}`);
@@ -74,6 +114,9 @@ function App() {
       const userId = authData.id;
       try {
         const res = await axios.post("http://localhost:5000/api/orders/get", { userId });
+        
+        temporaryOrderData = res.data;
+        console.log(temporaryOrderData);
         setOrderData(res.data);
       } catch (err) {
         toast.error(err.response);
