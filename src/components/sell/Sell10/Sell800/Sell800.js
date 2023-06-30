@@ -22,7 +22,7 @@ const Sell800 = () => {
     const quantity = document.querySelector('input[id="quantity-8"]').value;
 
     const data = {
-      img: img,
+      picture: img,
       className:className,
       title: title,
       weight: weight,
@@ -42,7 +42,7 @@ const Sell800 = () => {
         className="img-products"
       />
       <h4 className='title'>Пчелен мед - букет</h4>
-      <p className="weight">800g</p>
+      <p className="weight">800г.</p>
       <p className="price">Единична цена - 10лв.</p>
       <div className="quantity">
         <label

@@ -51,7 +51,7 @@ app.post("/api/login", (req, res) => {
     });
 });
 
-app.post("/api/orders", (req, res) => {
+app.post("/api/orders/insert", (req, res) => {
     const { userId, productsId, quantity } = req.body;
 
     const sqlInsert = "INSERT INTO med7.orders (fk_users_id, fk_product_id, quantity)VALUES ((SELECT id FROM med7.users WHERE id =(?)), (SELECT id FROM med7.products WHERE id =(?)), (?));";
@@ -64,16 +64,88 @@ app.post("/api/orders", (req, res) => {
     });
 });
 
-app.post("/api/orders/get", (req, res) => {
+app.post("/api/order/update", (req, res) => {
+    const quantity = req.body.quantity;
     const userId = req.body.userId;
+    const productId = Number(req.body.productId);
+    const date = req.body.date;
+
     // console.log(req.body);
 
-    const sqlInsert = "SELECT fk_product_id, quantity FROM med7.orders WHERE fk_users_id = (?)";
+    const sqlInsert = "UPDATE med7.orders SET quantity = (?), confirmed = true, date = (?) WHERE fk_users_id = (?) AND fk_product_id = (?)";
+
+    db.query(sqlInsert, [quantity, date, userId, productId], (error, result) => {
+        if (error) {
+            return res.json("Error");
+        }
+        return res.json(result);
+    });
+});
+
+app.post("/api/order/update/nco", (req, res) => {
+    const quantity = req.body.quantity;
+    const userId = req.body.userId;
+    const productId = Number(req.body.productId);
+
+    const sqlInsert = "UPDATE med7.orders SET quantity = (?), confirmed = false WHERE fk_users_id = (?) AND fk_product_id = (?)";
+
+    db.query(sqlInsert, [quantity, userId, productId], (error, result) => {
+        if (error) {
+            return res.json("Error");
+        }
+        return res.json(result);
+    });
+});
+
+app.post("/api/orders/get", (req, res) => {
+    const userId = req.body.userId;
+
+    const sqlInsert = "SELECT * FROM med7.orders WHERE fk_users_id = (?)";
 
     db.query(sqlInsert, [userId], (error, result) => {
         if (error) {
             return res.json("Error");
         }
+        return res.json(result);
+    });
+});
+
+app.post("/api/delete/order", (req, res) => {
+    const { userId, productsId } = req.body;
+    const sqlDelete = "DELETE FROM med7.orders WHERE confirmed = 0 AND fk_users_id = (?) AND fk_product_id = (?);";
+    db.query(sqlDelete, [userId, productsId], (error, result) => {
+        if (error) {
+            return res.json("Error");
+        }
+        return res.json(result);
+    });
+});
+
+app.post("/api/delete-confirmed/order", (req, res) => {
+    const { userId, productsId } = req.body;
+    const sqlDelete = "DELETE FROM med7.orders WHERE fk_users_id = (?) AND fk_product_id = (?) AND confirmed = 1;";
+    db.query(sqlDelete, [userId, productsId], (error, result) => {
+        if (error) {
+            return res.json("Error");
+        }
+        return res.json(result);
+    });
+});
+
+app.post("/api/order/update/quantity", (req, res) => {
+    const userId = Number(req.body.userId);
+    const productId = Number(req.body.productId);
+    const quantity = req.body.quantity;
+    const date = req.body.date;
+
+    const sqlInsert = "UPDATE med7.orders SET quantity = (?), date = (?), confirmed = 1 WHERE fk_users_id = (?) AND fk_product_id = (?)";
+
+    db.query(sqlInsert, [quantity, date, userId, productId], (error, result) => {
+        if (error) {
+            console.log(error);
+            return res.json("Error");
+        }
+        // console.log(result);
         return res.json(result);
     });
 });
@@ -142,17 +214,6 @@ app.put("/api/post", (req, res) => {
         if (error) {
             console.log(error);
         }
-    });
-});
-
-app.post("/api/delete/order", (req, res) => {
-    const { userId, productsId } = req.body;
-    const sqlDelete = "DELETE FROM med7.orders WHERE fk_users_id = (?) AND fk_product_id = (?);";
-    db.query(sqlDelete, [userId, productsId], (error, result) => {
-        if (error) {
-            return res.json("Error");
-        }
-        return res.json(result);
     });
 });
 

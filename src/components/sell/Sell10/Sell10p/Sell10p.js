@@ -21,7 +21,7 @@ const Sell10p = () => {
     const quantity = document.querySelector('input[id="quantity-10"]').value;
 
     const data = {
-      img: img,
+      picture: img,
       className: className,
       title: title,
       weight: weight,
@@ -41,7 +41,7 @@ const Sell10p = () => {
         alt="honey-metal box"
       />
       <h4 className='title-10' >Пчелен мед - букет</h4>
-      <p className="weight-10">10kg</p>
+      <p className="weight-10">10кг.</p>
       <p className="price-10">Единична цена - 90лв.</p>
       <div className="quantity">
         <label
