@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
 
@@ -10,13 +10,13 @@ let arrProd = [];
 
 const UserOrders = () => {
     let { user, orderData, setOrderData, arrProductsId, setProducts, products } = useContext(AuthContext);
-    // const [state, setState] = useState([]);
-    // const [order, setOrder] = useState(false);
     const userId = user.id;
     let temporaryProduct = 0;
 
     useEffect(() => {
-        console.log(orderData);
+        // console.log(orderData);
+        // console.log(arr);
+        // console.log(arrProd);
         if (orderData.length > 0) {
             orderData.map((x) => {
                 if (!products.find(pp => pp === x.fk_product_id)) {
@@ -35,39 +35,21 @@ const UserOrders = () => {
         arrProducts = arrProducts.filter(x => x !== temporaryProduct);
     }, [arrProducts]);
 
-    async function updateQuantityOfOrder(quantity, date, userId, productId) {///проверка дали вече не съществува друг с confirmed = 1;
-        console.log(arrProd);
-        console.log(orderData);
-        // if (arrProd.length > 0 && arrProd.find(x => {
-        //     console.log(x.id);
-        //     console.log(x.confirmed);
-        //     return x.id === Number(productId) && x.confirmed === 1
-        // })) {
-        //     console.log(22);
-        //     return;
-        // } else if (arrProd.id === Number(productId) && arrProd.confirmed === 1){
-        //     console.log(44);
-        //     return;
-        // }
-
+    async function updateQuantityOfOrder(quantity, date, userId, productId) {
         let res;
         try {
             res = await axios.post("http://localhost:5000/api/order/update/quantity", { quantity, date, userId, productId })
                 .then((data) => {
-                    console.log(data.data);////////////
                     return data.data;
                 })
                 .catch((error) => console.log(error));
         } catch (err) {
-            console.log(43);
             toast.error(err.response);
         }
-        console.log(res);///////
     };
 
     async function deleteConfirmedOrder(userId, productsId) {
         try {
-            console.log(44);
             await axios.post("http://localhost:5000/api/delete-confirmed/order", {
                 userId,
                 productsId,
@@ -94,10 +76,8 @@ const UserOrders = () => {
         const weight = getWeight.match(regex).join(',');
         const finalPrice = price * quantity;
 
-        // let date = new Date().toISOString().slice(0, 19).replace('T', ' ');
         const tzoffset = (new Date()).getTimezoneOffset() * 60000;
         let dateTime = (new Date(Date.now() - 2 * tzoffset)).toISOString().slice(0, 19).replace('T', ' ');
-        // let dateTime = (new Date()).toISOString().slice(0, 19).replace('T', ' ');
 
         const data = {
             id: Number(productId),
@@ -110,121 +90,83 @@ const UserOrders = () => {
             date: dateTime,
             confirmed: 1,
         }
-        console.log(orderData);
         if (orderData.length > 0 && orderData.find(x => x.fk_users_id === userId && x.fk_product_id === Number(productId) && x.confirmed === 0)) {
-            console.log(35);
             deleteConfirmedOrder(userId, productId);
             updateQuantityOfOrder(quantity, dateTime, userId, productId);
-
-            // orGet.forEach((item) => {
-            //     if (item.fk_product_id === Number(productId)) {
-            //         console.log(item);
-            //         item.quantity = data.quantity;
-            //     }
-            // });
 
             orderData.filter((item) => item.fk_product_id === Number(productId) && item.confirmed === 0
             );
             arrProductsId = arrProductsId.filter(x => x !== productId);
             arr = arr.filter(x => x.id !== Number(productId));
-            // setArr2(arr);
-            console.log(arrProd);
             if (!arrProd.find(x => x.id === Number(productId))) {
-                console.log(data);
                 arrProd.push(data);
             } else {
-                console.log(6);
                 arrProd.forEach((item) => {
                     if (item.id === Number(productId)) {
                         item = data;
                     }
                 });
             }
-            console.log(arrProd);
             setProducts(arrProductsId);
             return;
         } else if (orderData.length === undefined && orderData.fk_users_id === userId && orderData.fk_product_id === Number(productId) && orderData.confirmed === 0) {
-            console.log(arr);
             deleteConfirmedOrder(userId, productId);
             updateQuantityOfOrder(quantity, dateTime, userId, productId);
-
             setOrderData({});
             arrProductsId = [];
             setProducts(arrProductsId);
-
             arr = arr.filter(x => Number(x.id) !== Number(productId));
-            // setArr2(arr);
-            console.log(arr);/////////////
             if (!arrProd.find(x => {
-                console.log(x);//////////////
                 return x.id === Number(productId)
             })) {
-                console.log(21);
                 arrProd.push(data);
             } else {
-                console.log(arrProd);////////////////////
                 arrProd.forEach((item, i) => {
                     if (item.id == Number(productId)) {
-                        console.log(arrProd[i]);////////////////////
                         arrProd[i] = data;
                         updateQuantityOfOrder(quantity, dateTime, userId, productId);
                     }
                 });
             }
-            console.log(arrProd);/////////////////////////
             return;
         }
         if (orderData.length > 0) {
             console.log(orderData);
             if (!orderData.find(x => x.id === productId)) {
-                console.log(6);
-                // arrOrders.push(data);//////////////////////////////////////////
                 updateConfirmedOrder(dateTime, userId, productId);
                 deleteOrder(userId, productId);
             }
         } else if (orderData.length === undefined) {
-            console.log(6);
-            // arrOrders.push(data);///////////////////////////////////
             updateConfirmedOrder(dateTime, userId, productId);
         }
-        console.log(6);
         function remove(e) {
-            console.log(6);
             if (e.confirmed === 1) {
                 return e.fk_product_id !== productId;
             }
         }
 
         if (orderData.length > 0) {
-            console.log(6);
             orderData.filter(remove, productId);
             arrProductsId = arrProductsId.filter(x => x !== Number(productId));
         } else {
-            console.log(6);
             setOrderData({});
             arrProductsId = [];
         }
-        console.log(6);
         if (!arrProd.find(x => x.id === Number(productId))) {
-            console.log(6);
             arrProd.push(data);
         } else {
-            console.log(arrProd);
             arrProd.forEach((item, i) => {
                 if (item.id == Number(productId)) {
                     return item = data;
                 }
             });
         }
-        console.log(arrProd);
         arr = arr.filter(x => x.id !== Number(productId));
-        console.log(arr);
         setProducts(arrProductsId);
         // navigate(`/users/${user.id}`);
     };
 
     async function updateConfirmedOrder(date, userId, productId) {
-        console.log(orderData);
         if (orderData.length > 0 && orderData.find(x => {
             return x.fk_product_id === Number(productId) && x.confirmed === 1
         })) {
@@ -257,20 +199,15 @@ const UserOrders = () => {
     const productDelete = (orderDelete) => {
         orderDelete.preventDefault();
         const element = orderDelete.target.parentElement;
-        console.log(orderDelete);
-        console.log(user.id);
         const userId = user.id;
         const productsId = Number(element.getAttribute("name"));
         temporaryProduct = productsId;
-
         function remove(e) {
             return e.fk_product_id !== productsId;
         }
 
         if (orderData.length > 0) {
-            console.log(orderData);
             const temp = orderData.filter(remove, productsId);
-            console.log(temp);
             setOrderData(temp);
             arrProducts = arrProducts.filter(x => x !== temporaryProduct);
         } else {
@@ -278,55 +215,40 @@ const UserOrders = () => {
             arrProducts = [];
         }
         deleteOrder(userId, productsId);
-        console.log(arr);
         arr = arr.filter(x => x.id !== productsId);
-        console.log(arr);
-        // arrProducts = arrProducts.filter(x => x !== productsId);
         setProducts(arrProducts);
-
     };
 
     async function fetchProducts(productId, quantitNum, confirmed) {
         let res;
         try {
-
             res = await axios.post("http://localhost:5000/api/product/get", { productId })
                 .then((data) => {
                     const prod = data.data[0];
-                    // prod.quantity = quantitNum;
-                    // console.log(prod);
                     return prod;
                 })
                 .catch((error) => console.log(error));
             res.quantity = quantitNum;
-            console.log(1);
             if (confirmed === 1 && !arrProd.find(y => y.id === productId
             )) {
-                console.log(2);
                 const dateTemp = new Date().toISOString().slice(0, 19).replace('T', ' ');
                 const dataOfOrder = res;
                 const finalPrice = res.price * res.quantity;
                 dataOfOrder.finalPrice = finalPrice;
                 dataOfOrder.confirmed = 1;
                 dataOfOrder.date = dateTemp;
-                // console.log(dataOfOrder);
                 arrProd.push(dataOfOrder);//////
-                console.log(arrProd);
             }
             if (confirmed === 0 && !arr.find(y => y.id === productId)) {
-                console.log(res);
                 arrProductsId.push(res.id);
                 arr.push(res);
-                console.log(arr);
             }
         } catch (err) {
             toast.error(err.response);
         }
-        // console.log(arrProducts);
         setProducts(arrProducts);
-        // console.log(products);
     };
-    // console.log(products);
+
     return (
         <>
             {arr.length > 0 ? arr.map(x =>
@@ -355,7 +277,6 @@ const UserOrders = () => {
                             name="quantity"
                             defaultValue={x.quantity}
                             title="Qty"
-                            // size={4}
                             pattern="[0-9]*"
                             inputMode="numeric"
                             aria-labelledby=""

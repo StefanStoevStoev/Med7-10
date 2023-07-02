@@ -34,3 +34,64 @@
     background-color: #3e74619b;
     cursor: pointer;
 }
+
+.admin_o {
+ display: flex;
+}
+
+.admin__order {
+    display: flex;
+    padding: 10px;
+    margin-top: 20px;
+    height: auto;
+    width: calc(50% - 10px);
+    font-size: 14px;
+    background-color: var(--bg-color);
+    border: var(--info-border);
+}
+
+.admin__order:nth-child(odd) {
+    margin-right: 10px;
+}
+
+.admin__order:nth-child(even) {
+    margin-left: 10px;
+}
+
+.admin__order img {
+    height: 120px;
+    width: 140px;
+    float: left;
+    object-fit: cover;
+    border: var(--info-border);
+}
+
+.admin__order-product,
+.admin__order-user {
+    width: 180px;
+    padding: 5px 10px;
+    text-align: justify;
+}
+
+.btn_adm_order-order {
+    background-color: #ffa52f9b;
+    width: 80px;
+    bottom: 0px;
+    margin-bottom: 10px;
+    border: solid 1px rgb(96, 96, 96);
+}
+
+.btn_adm_order-cancel {
+    background-color: var(--btn-red);
+    width: 80px;
+    bottom: 0px;
+    margin-bottom: 10px;
+    border: solid 1px rgb(96, 96, 96);
+}
+
+.admin__order-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: auto;
+}

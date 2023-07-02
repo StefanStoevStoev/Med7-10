@@ -132,6 +132,19 @@ app.post("/api/delete-confirmed/order", (req, res) => {
     });
 });
 
+app.post("/api/admin/orders/get", (req, res) => {
+
+    const sqlInsert = "SELECT * FROM med7.orders WHERE sended = 0 AND confirmed = 1 ORDER BY date ASC;";
+
+    db.query(sqlInsert, [], (error, result) => {
+        if (error) {
+            return res.json("Error");
+        }
+        // console.log(result);
+        return res.json(result);
+    });
+});
+
 app.post("/api/order/update/quantity", (req, res) => {
     const userId = Number(req.body.userId);
     const productId = Number(req.body.productId);
@@ -215,6 +228,21 @@ app.put("/api/post", (req, res) => {
             console.log(error);
         }
     });
+});
+
+app.post("/api/join/products-users/get", (req, res) => {
+
+    const sqlGet = " SELECT u.`name`, u.`family_name`, u.`email`,u.`phone`,u.`city`,u.`street`,u.`street_number`,p.`title`, p.`weight`, p.`price`, p.`picture`, o.`quantity`, o.`date`, o.`sended` FROM `users` AS u JOIN `orders` AS o ON u.`id` = o.`fk_users_id` JOIN `products` AS p ON p.`id` = o.`fk_product_id` WHERE o.`confirmed` = 1 ORDER BY o.date ASC;";
+
+    db.query(sqlGet, [], (error, result) => {
+
+        if (error) {
+            return res.json("Error");
+        }
+        // console.log(result);
+        return res.json(result);
+    });
+
 });
 
 app.listen(5000, () => {

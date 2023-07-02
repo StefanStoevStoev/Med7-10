@@ -71,7 +71,7 @@ body::after {
 }
 
 .header {
-  background: url("https://images.unsplash.com/photo-1602449124229-c1114b1090d2?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1171&q=80");
+  background-image: url("../images/bee-flower.jpg");
   background-repeat: no-repeat;
   background-size: 100%;
   background-position: 0 17%;
