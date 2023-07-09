@@ -14,9 +14,6 @@ const UserOrders = () => {
     let temporaryProduct = 0;
 
     useEffect(() => {
-        // console.log(orderData);
-        // console.log(arr);
-        // console.log(arrProd);
         if (orderData.length > 0) {
             orderData.map((x) => {
                 if (!products.find(pp => pp === x.fk_product_id)) {
@@ -29,10 +26,16 @@ const UserOrders = () => {
     }, [orderData]);
 
     useEffect(() => {
+        console.log(arr);
+        console.log(temporaryProduct);
         if (arr.length > 0 && temporaryProduct !== 0) {
+            console.log(arr);
             arr = arr.filter(x => x[0].id !== temporaryProduct);
+            console.log(arr);
         }
+        console.log(arrProducts);
         arrProducts = arrProducts.filter(x => x !== temporaryProduct);
+        console.log(arrProducts);
     }, [arrProducts]);
 
     async function updateQuantityOfOrder(quantity, date, userId, productId) {
@@ -196,26 +199,33 @@ const UserOrders = () => {
         }
     };
 
-    const productDelete = (orderDelete) => {
-        orderDelete.preventDefault();
-        const element = orderDelete.target.parentElement;
+    const productDelete = (e) => {
+        e.preventDefault();
+        const element = e.target.parentElement;
         const userId = user.id;
         const productsId = Number(element.getAttribute("name"));
         temporaryProduct = productsId;
         function remove(e) {
             return e.fk_product_id !== productsId;
         }
-
+        console.log(orderData);
+        console.log(arrProducts);
         if (orderData.length > 0) {
+
             const temp = orderData.filter(remove, productsId);
+            console.log(temp);
             setOrderData(temp);
             arrProducts = arrProducts.filter(x => x !== temporaryProduct);
+            console.log(arrProducts);
         } else {
+            console.log(orderData);
             setOrderData({});
             arrProducts = [];
         }
         deleteOrder(userId, productsId);
+        console.log(arr);
         arr = arr.filter(x => x.id !== productsId);
+        console.log(arr);
         setProducts(arrProducts);
     };
 

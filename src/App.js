@@ -31,6 +31,8 @@ function App() {
   let [userProductsEdit, setUserProductsEdit] = useState([]);
   const [authEdit, setAuthEdit] = useState([]);
   const [products, setProducts] = useState([]);
+  const [usersOrders, setUsersOrders] = useState([]);
+
   const navigate = useNavigate();
 
   const userId = user.id;
@@ -109,6 +111,7 @@ function App() {
   // console.log(products);
   const userLogin = (authData) => {
     setUser(authData);
+    console.log(authData.role);
     // setAuth(authData);
     const fetchOrders = async () => {
       const userId = authData.id;
@@ -123,7 +126,24 @@ function App() {
       }
     };
     fetchOrders();
+    if (authData.role === 1) {
+      getUserOrders();
+    }
   };
+
+  async function getUserOrders() {
+    let res;
+    try {
+        res = await axios.post("http://localhost:5000/api/join/products-users/get")
+            .then((data) => {
+                return data.data;
+            })
+            .catch((err) => toast.error(err.response.data));
+    } catch (err) {
+        toast.error(err.response);
+    }
+    setUsersOrders(res);
+};
 
   const userRemove = () => {
     setUser([]);
@@ -168,6 +188,7 @@ function App() {
         {
           user,
           authEdit,
+          usersOrders,
           setAuthEdit,
           setProducts,
           products,

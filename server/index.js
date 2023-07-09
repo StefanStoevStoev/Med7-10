@@ -97,6 +97,50 @@ app.post("/api/order/update/nco", (req, res) => {
     });
 });
 
+app.post("/api/order/update/sended-date", (req, res) => {
+    const userId = req.body.userId;
+    const productId = req.body.productId;
+    const dateSended = req.body.date;
+
+    const sqlInsert = "UPDATE med7.orders SET sended = true, date_sended = (?) WHERE fk_users_id = (?) AND fk_product_id = (?) AND confirmed = true";
+
+    db.query(sqlInsert, [dateSended, userId, productId], (error, result) => {
+        if (error) {
+            return res.json("Error");
+        }
+        return res.json(result);
+    });
+});
+
+app.post("/api/order/cancel/sended0", (req, res) => {
+    const userId = req.body.userId;
+    const productId = req.body.productId;
+
+    const sqlInsert = "DELETE FROM med7.orders WHERE confirmed = 1 AND sended = 0 AND fk_users_id = (?) AND fk_product_id = (?);";
+
+    db.query(sqlInsert, [userId, productId], (error, result) => {
+        if (error) {
+            console.log(error);
+            return res.json("Error");
+        }
+        return res.json(result);
+    });
+});
+
+app.post("/api/order/cancel/sended1", (req, res) => {
+    const userId = req.body.userId;
+    const productId = req.body.productId;
+
+    const sqlInsert = "DELETE FROM med7.orders WHERE confirmed = 1 AND sended = 1 AND fk_users_id = (?) AND fk_product_id = (?);";
+
+    db.query(sqlInsert, [userId, productId], (error, result) => {
+        if (error) {
+            return res.json("Error");
+        }
+        return res.json(result);
+    });
+});
+
 app.post("/api/orders/get", (req, res) => {
     const userId = req.body.userId;
 
@@ -232,7 +276,7 @@ app.put("/api/post", (req, res) => {
 
 app.post("/api/join/products-users/get", (req, res) => {
 
-    const sqlGet = " SELECT u.`name`, u.`family_name`, u.`email`,u.`phone`,u.`city`,u.`street`,u.`street_number`,p.`title`, p.`weight`, p.`price`, p.`picture`, o.`quantity`, o.`date`, o.`sended` FROM `users` AS u JOIN `orders` AS o ON u.`id` = o.`fk_users_id` JOIN `products` AS p ON p.`id` = o.`fk_product_id` WHERE o.`confirmed` = 1 ORDER BY o.date ASC;";
+    const sqlGet = " SELECT u.`id` AS `userid`, u.`name`, u.`family_name`, u.`email`,u.`phone`,u.`city`,u.`street`,u.`street_number`, p.`id` AS `productid`, p.`title`, p.`weight`, p.`price`, p.`picture`, o.`quantity`, o.`date`, o.`sended` FROM `users` AS u JOIN `orders` AS o ON u.`id` = o.`fk_users_id` JOIN `products` AS p ON p.`id` = o.`fk_product_id` WHERE o.`confirmed` = 1 ORDER BY o.date ASC;";
 
     db.query(sqlGet, [], (error, result) => {
 
