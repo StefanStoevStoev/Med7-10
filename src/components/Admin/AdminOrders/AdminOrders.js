@@ -3,60 +3,18 @@ import { AuthContext } from "../../../contexts/AuthContext";
 
 import axios from "axios";
 import { toast } from "react-toastify";
+import x from "uniqid";
 // import UserOrders from "../../User/UserOrders/UserOrders";
-let arrOrders = [];
-let arrSendedOrders = [];
 let boolUserOrders = true;
-// let arrProducts = [];
+let temporaryOrders = [];
+let temporarySendedOrders = [];
 
 
 
-const AdminOrders = () => {
-    let { usersOrders } = useContext(AuthContext);
-    let [arrData, setArrData] = useState([]);
+const AdminOrders = ({ arrData, setArrData, arrSendedOrders, setArrSendedOrders, arrOrders }) => {
+    let { usersOrders, setUsersOrders } = useContext(AuthContext);
     let temporaryProductId = 0;
     let temporaryUserId = 0;
-
-    function getArrOrders() {
-        console.log(usersOrders);
-        console.log(arrOrders);
-        console.log(arrSendedOrders);
-        // if (usersOrders.length !== arrOrders.length + arrSendedOrders.length) {
-        if (boolUserOrders) {
-            console.log(arrOrders);
-            if (arrOrders.length === 0 || arrSendedOrders === 0) {
-                if (usersOrders.length > 0) {
-                    usersOrders.map(x => {
-                        // console.log(x);
-                        if (x.sended === 0) {
-                            arrOrders.push(x);
-                        } else if (x.sended === 1) {
-                            arrSendedOrders.push(x);
-                        }
-                    })
-                } else {
-                    console.log(usersOrders);
-                    console.log(arrOrders);
-                    if (usersOrders.sended === 0) {
-                        arrOrders.push(usersOrders);
-                    } else if (usersOrders.sended === 1) {
-                        arrSendedOrders.push(usersOrders);
-                    }
-                };
-                setArrData(arrOrders);
-                console.log(arrData);
-            }
-        }
-    }
-    getArrOrders();
-
-    useEffect(() => {
-        console.log(arrData);
-        console.log(arrOrders);
-        getArrOrders();
-        console.log(arrOrders);
-
-    }, [arrData]);
 
     const cancelOrder0 = (e) => {
         e.preventDefault();
@@ -65,13 +23,9 @@ const AdminOrders = () => {
         const userId = Number(element.getAttribute("name"));
         boolUserOrders = false;
 
-        console.log(productId);
-        console.log(userId);
-
         temporaryProductId = productId;
         temporaryUserId = userId;
         cancelOrderSended0(userId, productId);
-        console.log(arrOrders);
         arrOrders = arrOrders.filter(function (x) {
             if (x.userid === userId) {
                 if (x.productid === productId) {
@@ -80,8 +34,9 @@ const AdminOrders = () => {
             }
             return true;
         });
-        console.log(usersOrders);
-        usersOrders = usersOrders.filter(function (x) {
+
+        temporaryOrders = arrData;
+        temporaryOrders = temporaryOrders.filter(function (x) {
             if (x.userid === userId) {
                 if (x.productid === productId) {
                     return false;
@@ -89,18 +44,8 @@ const AdminOrders = () => {
             }
             return true;
         });
-        console.log(usersOrders);
-
-        // let temporaryArr = arrOrders.filter(function (x) {
-        //     if (x.userid === userId) {
-        //         if (x.productid === productId) {
-        //             return false;
-        //         }
-        //     }
-        //     return true;
-        // });
-        setArrData(arrOrders);
-        console.log(arrOrders);
+        setUsersOrders(temporaryOrders);
+        setArrData(temporaryOrders);
     };
 
     const cancelOrder1 = (e) => {
@@ -110,17 +55,27 @@ const AdminOrders = () => {
         const userId = Number(element.getAttribute("name"));
 
         cancelOrderSended1(userId, productId);
-        console.log(arrSendedOrders);
-        arrSendedOrders = arrSendedOrders.filter(x => x.userid !== userId && x.productid !== productId);
-        console.log(arrSendedOrders);
+        temporarySendedOrders = arrSendedOrders;
+        // console.log(temporarySendedOrders);
+        temporarySendedOrders = temporarySendedOrders.filter(function (x) {
+            if (x.userid === userId) {
+                if (x.productid === productId) {
+                    return false;
+                }
+            }
+            return true;
+        });
+        // console.log(temporarySendedOrders);
+        setArrSendedOrders(temporarySendedOrders);
+        // console.log(arrSendedOrders);
     };
 
     const sendingOrder = (e) => {
         e.preventDefault();
 
         const element = e.target.parentElement.parentElement;
-        const productId = element.getAttribute("title");
-        const userId = element.getAttribute("name");
+        const productId = Number(element.getAttribute("title"));
+        const userId = Number(element.getAttribute("name"));
 
         // const getWeight = element.querySelector('p[class="weight"]').textContent;
         const getPrice = element.querySelector('p[class="price"]').textContent;
@@ -165,7 +120,24 @@ const AdminOrders = () => {
         console.log(arrOrders);
         console.log(arrSendedOrders);
         updateOrdersSended(userId, productId, dateTimeNow);
-        arrSendedOrders.push(data);
+        temporarySendedOrders = arrSendedOrders;
+        temporarySendedOrders.push(data);
+
+        temporaryOrders = arrData;
+
+        temporaryOrders = temporaryOrders.filter(function (x) {
+            if (x.userid === userId) {
+                if (x.productid === productId) {
+                    return false;
+                }
+            }
+            return true;
+        });
+
+        setArrData(temporaryOrders);
+
+        setArrSendedOrders(temporarySendedOrders);
+
     }
 
     async function updateOrdersSended(userId, productId, date) {
@@ -240,6 +212,9 @@ const AdminOrders = () => {
 
     return (
         <>
+            {arrData.length > 0 ?
+                <h2 className="adm_title">Поръчани</h2>
+                : ''}
             <div className="admin_o">
                 {arrData.length > 0 ? arrData.map((x, index) =>
                     <form className="admin__order" key={x.productid + x.userid}
@@ -275,9 +250,12 @@ const AdminOrders = () => {
                 }
 
             </div>
+            {arrSendedOrders.length > 0 ?
+                <h2 className="adm_title">Изпратени</h2>
+                : ''}
             <div className="admin_o">
                 {arrSendedOrders.length > 0 ? arrSendedOrders.map(x =>
-                    <form className="admin__order" key={x.userid}
+                    <form className="admin__order" key={x.userid + x.productid}
                         name={x.userid} title={x.productid}>
                         <img src={x.picture} alt="product-picture" />
                         <section className="admin__order-product">

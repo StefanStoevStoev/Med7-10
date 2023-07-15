@@ -40,7 +40,9 @@ function App() {
 
   useEffect(() => {
     const papa = userDetails(userId);
-    console.log(products);
+    // console.log(products);
+    // console.log(orderData);
+    // console.log(usersOrders);
   }, [user, products]);
 
   async function updateNonConfirmedOrder( quantity, userId, productId) {
@@ -85,15 +87,11 @@ function App() {
 
     if (orderData.length > 0 && orderData.find(x => x.fk_product_id === productsId && x.confirmed === 0)) {
       updateNonConfirmedOrder( quantity, userId, productsId);
-      // setUserProductsEdit(productsData);
-      // arrProductsId.push(productsId);
       console.log(orderData);
-      // setOrderData(dataOrder);
       navigate(`/users/${userId}`);
     } else {
       arrProductsId.push(productsId);
       setUserProductsEdit(productsData);
-      // console.log(userProductsEdit);
 
       axios.post("http://localhost:5000/api/orders/insert", {
         userId,
@@ -108,7 +106,6 @@ function App() {
       navigate(`/users/${userId}`);
     }
   };
-  // console.log(products);
   const userLogin = (authData) => {
     setUser(authData);
     console.log(authData.role);
@@ -124,6 +121,7 @@ function App() {
       } catch (err) {
         toast.error(err.response);
       }
+      console.log(orderData);
     };
     fetchOrders();
     if (authData.role === 1) {
@@ -142,6 +140,8 @@ function App() {
     } catch (err) {
         toast.error(err.response);
     }
+    console.log(orderData);
+    console.log(usersOrders);
     setUsersOrders(res);
 };
 
@@ -189,6 +189,7 @@ function App() {
           user,
           authEdit,
           usersOrders,
+          setUsersOrders,
           setAuthEdit,
           setProducts,
           products,

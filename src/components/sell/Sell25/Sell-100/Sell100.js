@@ -2,6 +2,7 @@ import { useContext } from "react";
 import { useNavigate } from 'react-router-dom';
 
 import { AuthContext } from "../../../../contexts/AuthContext";
+import product_pollen from '../../../../images/product_pollen.jpg';
 
 const Sell100 = () => {
   const { user, userProducts } = useContext(AuthContext);
@@ -37,7 +38,7 @@ const Sell100 = () => {
   return (
     <form className="sell__100"  key={'sell__100'}>
       <img
-        src="https://southbayapiaries.com/wp-content/uploads/2022/01/pollen_104723465.jpg"
+        src={product_pollen}
         alt="pollen"
         className="img-products-100"
       />

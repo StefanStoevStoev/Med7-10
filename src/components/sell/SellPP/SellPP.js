@@ -2,6 +2,7 @@ import { useContext } from "react";
 import { useNavigate } from 'react-router-dom';
 
 import { AuthContext } from "../../../contexts/AuthContext";
+import products_propolis from '../../../images/products-propolis.jpg';
 
 const SellPP = () => {
   const { user, userProducts } = useContext(AuthContext);
@@ -38,7 +39,7 @@ const SellPP = () => {
         <form className="sell__p-p" key={"sell__p-p"}>
           <div className="sell__pp">
             <img
-              src="https://m.az-jenata.bg/media/az-jenata/files/articles/448x336/ed3dbee27db41f51f61d93816cb628d4.jpg"
+              src={products_propolis}
               alt="propolis"
               className="img-products-50"
             />

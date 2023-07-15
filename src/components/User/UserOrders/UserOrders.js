@@ -6,11 +6,12 @@ import { AuthContext } from "../../../contexts/AuthContext";
 let arr = [];
 let arrProducts = [];
 let arrProd = [];
+let temporaryOrderData = [];
 
 
 const UserOrders = () => {
     let { user, orderData, setOrderData, arrProductsId, setProducts, products } = useContext(AuthContext);
-    const userId = user.id;
+    const userId = Number(user.id);
     let temporaryProduct = 0;
 
     useEffect(() => {
@@ -64,10 +65,9 @@ const UserOrders = () => {
     };
 
     const orderProduct = (e) => {
-
         e.preventDefault();
         const element = e.target.parentElement;
-        const productId = element.getAttribute("name");
+        const productId = Number(element.getAttribute("name"));
 
         const picture = element.querySelector("img").src;
         const title = element.querySelector('h4[class="title"]').textContent;
@@ -93,11 +93,17 @@ const UserOrders = () => {
             date: dateTime,
             confirmed: 1,
         }
-        if (orderData.length > 0 && orderData.find(x => x.fk_users_id === userId && x.fk_product_id === Number(productId) && x.confirmed === 0)) {
-            deleteConfirmedOrder(userId, productId);
-            updateQuantityOfOrder(quantity, dateTime, userId, productId);
+        console.log(orderData);
+        console.log(arr);
 
-            orderData.filter((item) => item.fk_product_id === Number(productId) && item.confirmed === 0
+        console.log( orderData.find(x => x.fk_users_id === userId && x.fk_product_id === productId && x.confirmed === 0));
+
+        console.log(orderData);
+        if (orderData.length > 0 && orderData.find(x => x.fk_users_id === userId && x.fk_product_id === productId && x.confirmed === 0)) {
+            // deleteConfirmedOrder(userId, productId);
+            // updateQuantityOfOrder(quantity, dateTime, userId, productId);
+
+            orderData.filter((item) => item.fk_product_id === productId && item.confirmed === 0
             );
             arrProductsId = arrProductsId.filter(x => x !== productId);
             arr = arr.filter(x => x.id !== Number(productId));
@@ -113,8 +119,8 @@ const UserOrders = () => {
             setProducts(arrProductsId);
             return;
         } else if (orderData.length === undefined && orderData.fk_users_id === userId && orderData.fk_product_id === Number(productId) && orderData.confirmed === 0) {
-            deleteConfirmedOrder(userId, productId);
-            updateQuantityOfOrder(quantity, dateTime, userId, productId);
+            // deleteConfirmedOrder(userId, productId);
+            // updateQuantityOfOrder(quantity, dateTime, userId, productId);
             setOrderData({});
             arrProductsId = [];
             setProducts(arrProductsId);
@@ -127,20 +133,21 @@ const UserOrders = () => {
                 arrProd.forEach((item, i) => {
                     if (item.id == Number(productId)) {
                         arrProd[i] = data;
-                        updateQuantityOfOrder(quantity, dateTime, userId, productId);
+                        // updateQuantityOfOrder(quantity, dateTime, userId, productId);
                     }
                 });
             }
             return;
         }
+        console.log(orderData);
         if (orderData.length > 0) {
             console.log(orderData);
             if (!orderData.find(x => x.id === productId)) {
-                updateConfirmedOrder(dateTime, userId, productId);
-                deleteOrder(userId, productId);
+                // updateConfirmedOrder(dateTime, userId, productId);/////////////////////
+                // deleteOrder(userId, productId);
             }
         } else if (orderData.length === undefined) {
-            updateConfirmedOrder(dateTime, userId, productId);
+            // updateConfirmedOrder(dateTime, userId, productId);//////////////////
         }
         function remove(e) {
             if (e.confirmed === 1) {

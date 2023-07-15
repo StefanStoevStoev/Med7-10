@@ -43,9 +43,27 @@
     padding: 10px;
     margin-top: 20px;
     height: auto;
-    width: 50%;
+    width: calc(50% - 10px);
     background-color: var(--bg-color);
     border: var(--info-border);
+}
+
+.sell__800:nth-child(odd),
+.sell__10:nth-child(odd),
+.sell__100:nth-child(odd),
+.sell__25:nth-child(odd),
+.sell__p:nth-child(odd),
+.sell__pp:nth-child(odd) {
+    margin-left: 10px;
+}
+
+.sell__800:nth-child(even),
+.sell__10:nth-child(even),
+.sell__100:nth-child(even),
+.sell__25:nth-child(even),
+.sell__p:nth-child(even),
+.sell__pp:nth-child(even) {
+    margin-right: 10px;
 }
 
 .sell__pp {
