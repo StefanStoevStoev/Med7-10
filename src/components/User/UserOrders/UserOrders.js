@@ -35,6 +35,7 @@ const UserOrders = () => {
                                 // count++;
                             }
                         });
+                        console.log(arrInitialOrders);
                         setArrOrders(arrInitialOrders);
                         console.log(arrOrders);
                     }
@@ -86,6 +87,7 @@ const UserOrders = () => {
                                 // count++;
                             }
                         });
+                        console.log(arrInitialOrders);
                         setArrOrders(arrInitialOrders);
                         console.log(arrOrders);
                     }
@@ -191,14 +193,15 @@ const UserOrders = () => {
             // console.log(orderData);
             // console.log(arrInitialOrders.length);
             if (arrInitialOrders.length > 0) {
+                console.log(arrInitialOrders);
                 setArrOrders(arrInitialOrders);
-                console.log(1);
+                console.log(arrOrders);
             } else {
-                console.log(arrOrders);
-                console.log(arrOrders.filter(a => a.id !== productId));
-                console.log(arrOrders);
-                setArrOrders(arrOrders.filter(a => a.id !== productId));
                 // console.log(arrOrders);
+                // console.log(arrOrders.filter(a => a.id !== productId));
+                console.log(arrOrders.filter(a => a.id !== productId));
+                setArrOrders(arrOrders.filter(a => a.id !== productId));
+                console.log(arrOrders);
             }
 
             if (!arrProd.find(x => x.id === productId)) {
@@ -233,8 +236,9 @@ const UserOrders = () => {
             setProducts(arrProductsId);
             console.log(products);
             arrInitialOrders = arrInitialOrders.filter(x => Number(x.id) !== productId);
-            setArrOrders(arrInitialOrders);
             console.log(arrInitialOrders);
+            setArrOrders(arrInitialOrders);
+            console.log(arrOrders);
             if (!arrProd.find(x => {
                 return x.id === productId
             })) {
@@ -409,10 +413,12 @@ const UserOrders = () => {
             if (confirmed === 0 && !arrInitialOrders.find(y => y.id === productId)) {
                 console.log(arrInitialOrders);
                 arrProductsId.push(res.id);
-                arrInitialOrders.push(res);
+                console.log(productId);///////////////
+                arrInitialOrders.push(res);//////////////////zashto vliza
                 console.log(res);
                 console.log(arrInitialOrders);
             }
+            console.log(arrInitialOrders);
             setArrOrders(arrInitialOrders);
             console.log(products);
             console.log(arrProducts);
