@@ -1,6 +1,7 @@
 import { useState } from "react";
 import HiveFull from "./HiveFull";
 import "../../../../css/home.css";
+import home_info_honey_family from '../../../../images/home_info_honey_family.jpg';
 
 const Hive = ( {removeHistory} ) => {
   const [open, setOpen] = useState(false);
@@ -23,8 +24,8 @@ const Hive = ( {removeHistory} ) => {
   return (
     <div className={hiveFull}>
       <img className="img3"
-        // src="https://www.naturepl.com/cache/pcache2/00594061.jpg"
-        src="https://www.mindenpictures.com/cache/pcache2/00594061.jpg"
+      src={home_info_honey_family}
+        // src="https://www.mindenpictures.com/cache/pcache2/00594061.jpg"
         alt="hive"
       />
       <h4>Пчелно семейство</h4>

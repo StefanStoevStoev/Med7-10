@@ -1,6 +1,7 @@
 import { useState } from "react";
 import HistoryFull from "./HistoryFull";
 import "../../../../css/home.css";
+import home_info_beekeeping_egypt from '../../../../images/home_info_beekeeping_egypt.jpg';
 
 const History = ({ removeHive }) => {
   const [open, setOpen] = useState(false);
@@ -23,13 +24,14 @@ const History = ({ removeHive }) => {
   return (
     <div className={historyFull}>
       <img
-        src="https://www.bees.wales/assets/img/article-organic-beekeeping-egypt.jpg"
+        src={home_info_beekeeping_egypt}
+        // src="https://www.bees.wales/assets/img/article-organic-beekeeping-egypt.jpg"
         alt="honey-history"
       />
 
       <h4>История на пчеларството</h4>
       <p className="firstP">
-      &ensp;Пчелата се е появила около 50-60 000г. преди появата на човека. Има
+        &ensp;Пчелата се е появила около 50-60 000г. преди появата на човека. Има
         пещерни рисунки, които показват, че пещерният човек е познавал вкуса на
         меда. Исторически паметници показват първата цивилизация документирала
         отглеждането на пчелни семейства е египетската преди повече от 6000г.

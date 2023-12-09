@@ -1,8 +1,13 @@
+import company_view1 from '../../images/company_view1.jpeg';
+import company_view2 from '../../images/company_view2.jpg';
+
 const Company = () => {
 
-  const img = "https://www.onfire.bg/data/uploads/originals/hotels/286/9128893ac922a4b3e4f8f752acdee157.jpg";
+  // const img = "https://www.onfire.bg/data/uploads/originals/hotels/286/9128893ac922a4b3e4f8f752acdee157.jpg";
 
-  const img2 = "https://lh5.googleusercontent.com/p/AF1QipOQlRcZ1mnDkSm0L9lsnaQTNVGA0lZ2CV9dqVw=w548-h318-n-k-no";
+  const img = {company_view1};
+  const img2 = {company_view2};
+  // const img2 = "https://lh5.googleusercontent.com/p/AF1QipOQlRcZ1mnDkSm0L9lsnaQTNVGA0lZ2CV9dqVw=w548-h318-n-k-no";
 
   const addDefaultSrc = (ev) => {
     ev.target.src = img2;
@@ -11,7 +16,7 @@ const Company = () => {
     return (
         <div className="company">
         <img className="img"
-          src="https://visitstarazagora.bg/storage/thumbs/Rk1OrdZ9dirBdm9P6r6H9cIaQVL7IvUx4rp9dqDe_1200_auto.jpeg"
+          src={company_view1}
           alt="img-company1"
         />
   
@@ -29,7 +34,8 @@ const Company = () => {
         Минералната вода е леко минерализирана, хипертермална, с неутрална реакция. Съдържа хидрокарбонати, сулфати, калций, магнезий, силиций, флуор и други микроелементи. Има лечебни свойства при заболявания на опорно-двигателния апарат, периферната нервна система, гинекологични, бъбречно-урологични, стомашно-чревни и чернодробно-жлъчни болести.
       </p>
       <img className="img3"
-          src={img} onError={addDefaultSrc}
+          src={company_view2}
+           onError={addDefaultSrc}
           alt="img-company2"
         />
       <p>

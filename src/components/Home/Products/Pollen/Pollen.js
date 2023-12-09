@@ -1,6 +1,7 @@
 import { useState } from "react";
 import "../../../../css/honey.css";
 import PollenFull from "./PollenFull";
+import home_product_bee_pollen from '../../../../images/home_product_bee_pollen.webp';
 
 const Pollen = ({ removeHoney, removePropolis }) => {
   const [open, setOpen] = useState(false);
@@ -24,7 +25,8 @@ const Pollen = ({ removeHoney, removePropolis }) => {
   return (
     <div className={pollenFull}>
       <img
-        src="https://cdn.shopify.com/s/files/1/0420/4442/4353/files/bee_pollen_1_1024x1024.jpg?v=1620666269"
+      src={home_product_bee_pollen}
+        // src="https://cdn.shopify.com/s/files/1/0420/4442/4353/files/bee_pollen_1_1024x1024.jpg?v=1620666269"
         alt="pollen"
       />
       <div className="products__pollen-text">

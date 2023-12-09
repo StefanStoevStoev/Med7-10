@@ -7,94 +7,105 @@ let arrInitialOrders = [];
 let arrProducts = [];
 let arrProd = [];
 let temporaryOrderData = [];
-let count = 0;
+let num = 0;
+let bool = true;
+console.log(bool);
+console.log(num);
 
 
 const UserOrders = () => {
     let { user, orderData, removeOrder, arrProductsId, setProducts, products } = useContext(AuthContext);
     const [arrOrders, setArrOrders] = useState([]);
+    const [takeProduct, setTakeProduct] = useState({});
+    const [singleProduct, setSingleProduct] = useState({});
     const userId = Number(user.id);
     let temporaryProduct = 0;
 
     useEffect(() => {
-        console.log(orderData);
-        // console.log(orderData.length);
-        // console.log(orderData.length > 0);
-        // console.log(orderData.pop());
         if (orderData.length > 0) {
-            console.log(arrInitialOrders);
+            console.log(products);
             orderData.map((x) => {
+                console.log(x.fk_product_id);
+                console.log(x.quantity);
+                console.log(x.confirmed);
+                const pr = fetchProducts(x.fk_product_id, x.quantity, x.confirmed);
+                setSingleProduct(pr);
+                console.log(singleProduct);
                 if (!products.find(pp => pp === x.fk_product_id)) {
                     console.log(x);
+                    console.log(arrInitialOrders);
                     if (arrInitialOrders.length > 0) {
                         arrInitialOrders.forEach((y) => {
-                            console.log(y.id, x.id, y.quantity, x.quantity);
-                            if (y.id === x.id && y.quantity !== x.quantity) {
-                                console.log(x.quantity);
-                                y.quantity = x.quantity;
-                                // count++;
+                            console.log(y);
+                            if (y.id === x.fk_product_id && y.quantity !== x.quantity) {
+                                y.quantity = singleProduct.quantity;
+                                y.id = singleProduct.id;
+                                y.date = singleProduct.date;
+                                y.title = singleProduct.title;
+                                y.weight = singleProduct.weight;
+                                y.price = singleProduct.price;
+                                y.picture = singleProduct.picture;
                             }
-                        });
-                        console.log(arrInitialOrders);
-                        setArrOrders(arrInitialOrders);
-                        console.log(arrOrders);
+                        })
+                    } else {
+                        arrInitialOrders.push(singleProduct);
                     }
-                    console.log(x.fk_product_id);
-                    fetchProducts(x.fk_product_id, x.quantity, x.confirmed);
+                    console.log(arrInitialOrders);
+                        setArrOrders(arrInitialOrders);
+                    // console.log(orderData);
+                    // fetchProducts(x.fk_product_id, x.quantity, x.confirmed);
+                    // if (orderData.fk_users_id !== undefined) {
+
+                    // temporaryProduct = orderData.fk_product_id;
+                    // };
+
+                    if (x.confirmed === 0 && !arrInitialOrders.find(y => y.id === x.fk_product_id)) {
+                        console.log(singleProduct);
+                        arrProductsId.push(singleProduct.id);
+                        arrInitialOrders.push(singleProduct);//////////////////zashto vliza
+                    }
+                    setArrOrders(arrInitialOrders);
+                    setProducts(arrProducts);
+                    console.log(arrOrders);
+                    temporaryProduct = x.fk_product_id;
                 }
-                console.log(arrInitialOrders);
             })
         }
         console.log(orderData);
-        console.log(orderData.fk_users_id);
-        if (orderData.fk_users_id !== undefined) {
-            console.log(products);
-            console.log(orderData.fk_product_id);
-            fetchProducts(orderData.fk_product_id, orderData.quantity, orderData.confirmed);
-        };
-    }, [orderData]);
 
 
+        num = 1;
+    }, []);
 
     useEffect(() => {
-        console.log(arrInitialOrders);
-        console.log(orderData);
-        // console.log(arrInitialOrders.length);
-        // setArrOrders(arrOrders.filter(a => a.id !== artist.id));
-        // if (arrInitialOrders.length > 0) {
-        //     setArrOrders(arrInitialOrders);
-        //     console.log(1);
-        // } else {
-        // //     arrOrders.pop();
-        //     console.log(arrOrders);
-        // setArrOrders(arrOrders.pop());
-        // //     setArrOrders(arrOrders);
-        //     console.log(arrOrders);
-        // }
-        console.log(arrInitialOrders);
-        console.log(orderData);
         if (orderData.length > 0) {
             orderData.map((x) => {
                 console.log(products);////products repeat
                 if (!products.find(pp => pp === x.fk_product_id)) {
-                    console.log(x);
                     if (arrInitialOrders.length > 0) {
                         arrInitialOrders.forEach((y) => {
-                            // console.log(y.id, x.fk_product_id, y.quantity, x.quantity);
                             if (y.id === x.fk_product_id && y.quantity !== x.quantity) {
-                                // console.log(x.quantity);
                                 y.quantity = x.quantity;
                                 // count++;
                             }
                         });
-                        console.log(arrInitialOrders);
                         setArrOrders(arrInitialOrders);
-                        console.log(arrOrders);
                     }
-                    console.log(x.fk_product_id);
-                    fetchProducts(x.fk_product_id, x.quantity, x.confirmed);
+                    // fetchProducts(x.fk_product_id, x.quantity, x.confirmed);
+                    // console.log(takeProduct);
+
+                    fetchProducts(orderData.fk_product_id, orderData.quantity, orderData.confirmed);
+                    // temporaryProduct = orderData.fk_product_id;
+                    // };
+                    if (orderData.confirmed === 0 && !arrInitialOrders.find(y => y.id === orderData.fk_product_id)) {
+                        arrProductsId.push(takeProduct.id);
+                        arrInitialOrders.push(takeProduct);//////////////////zashto vliza
+                    }
+                    setArrOrders(arrInitialOrders);
+                    setProducts(arrProducts);
+                    // bool = false;
+                    temporaryProduct = x.fk_product_id;
                 }
-                console.log(arrInitialOrders);
             })
         }
 
@@ -107,15 +118,60 @@ const UserOrders = () => {
         //     console.log(arrInitialOrders);
         //     setArrOrders(arrInitialOrders);
         // }
-        console.log(arrProducts);
-        console.log(arrOrders);
+
         arrProducts = arrProducts.filter(x => x !== temporaryProduct);
-        console.log(arrProducts);
+        num = 0;
     }, [arrInitialOrders]);
 
-    // useEffect(() => {
-    //     setArrOrders([]);
-    // }, [arrInitialOrders]);
+    // function fillInitialOrders(){
+    //     if (orderData.length > 0) {
+    //         console.log(products);
+    //         orderData.map((x) => {
+    //             console.log(x.fk_product_id);
+    //             console.log(x.quantity);
+    //             console.log(x.confirmed);
+    //             const pr = fetchProducts(x.fk_product_id, x.quantity, x.confirmed);
+    //             setSingleProduct(pr);
+    //             console.log(singleProduct);
+    //             if (!products.find(pp => pp === x.fk_product_id)) {
+    //                 console.log(x);
+    //                 console.log(arrInitialOrders);
+    //                 if (arrInitialOrders.length > 0) {
+    //                     arrInitialOrders.forEach((y) => {
+    //                         console.log(y);
+    //                         if (y.id === x.id && y.quantity !== x.quantity) {
+    //                             y.quantity = singleProduct.quantity;
+    //                             y.id = singleProduct.id;
+    //                             y.date = singleProduct.date;
+    //                             y.title = singleProduct.title;
+    //                             y.weight = singleProduct.weight;
+    //                             y.price = singleProduct.price;
+    //                             y.picture = singleProduct.picture;
+    //                         }
+    //                     });
+    //                     setArrOrders(arrInitialOrders);
+    //                 }
+    //                 // console.log(orderData);
+    //                 // fetchProducts(x.fk_product_id, x.quantity, x.confirmed);
+    //                 // if (orderData.fk_users_id !== undefined) {
+
+    //                 // temporaryProduct = orderData.fk_product_id;
+    //                 // };
+
+    //                 if (x.confirmed === 0 && !arrInitialOrders.find(y => y.id === x.fk_product_id)) {
+    //                     console.log(singleProduct);
+    //                     arrProductsId.push(singleProduct.id);
+    //                     arrInitialOrders.push(singleProduct);//////////////////zashto vliza
+    //                 }
+    //                 setArrOrders(arrInitialOrders);
+    //                 setProducts(arrProducts);
+    //                 console.log(arrOrders);
+    //                 temporaryProduct = x.fk_product_id;
+    //             }
+    //         })
+    //     }
+    // }
+   
 
     async function updateQuantityOfOrder(quantity, date, userId, productId) {
         let res;
@@ -146,6 +202,9 @@ const UserOrders = () => {
         e.preventDefault();
         const element = e.target.parentElement;
         const productId = Number(element.getAttribute("name"));
+        if (arrOrders.length === 1) {
+            bool = true;
+        }
 
         const picture = element.querySelector("img").src;
         const title = element.querySelector('h4[class="title"]').textContent;
@@ -171,15 +230,9 @@ const UserOrders = () => {
             date: dateTime,
             confirmed: 1,
         }
-        console.log(orderData);
-        console.log(arrInitialOrders);
         temporaryOrderData = orderData;
 
-        console.log(orderData.find(x => x.fk_product_id === productId && x.confirmed === 0));
-
-        // console.log(orderData);
         if (orderData.length > 0 && orderData.find(x => x.fk_product_id === productId && x.confirmed === 0)) {
-            console.log(temporaryOrderData);
             deleteConfirmedOrder(userId, productId);
             updateQuantityOfOrder(quantity, dateTime, userId, productId);
 
@@ -193,58 +246,37 @@ const UserOrders = () => {
             // console.log(orderData);
             // console.log(arrInitialOrders.length);
             if (arrInitialOrders.length > 0) {
-                console.log(arrInitialOrders);
                 setArrOrders(arrInitialOrders);
-                console.log(arrOrders);
             } else {
                 // console.log(arrOrders);
                 // console.log(arrOrders.filter(a => a.id !== productId));
-                console.log(arrOrders.filter(a => a.id !== productId));
                 setArrOrders(arrOrders.filter(a => a.id !== productId));
-                console.log(arrOrders);
             }
 
             if (!arrProd.find(x => x.id === productId)) {
-                console.log(arrProd);
                 arrProd.push(data);
             } else {
-                console.log(arrProd);
                 arrProd.forEach((item) => {// ne raboti
-                    console.log(item);
-                    console.log(item.id);
-                    console.log(data);
                     if (item.id === productId) {
                         item.quantity = quantity;
-                        console.log(item);
                     }
                 });
-                console.log(arrProd);
             }
-            console.log(arrProductsId);
-            console.log(products);
             setProducts(arrProductsId);
-            console.log(products);
             return;
         } else if (orderData.length === undefined && orderData.fk_product_id === productId && orderData.confirmed === 0) {
-            console.log(arrInitialOrders);
             deleteConfirmedOrder(userId, productId);
             updateQuantityOfOrder(quantity, dateTime, userId, productId);
             removeOrder([]);
             arrProductsId = [];
-            console.log(products);
-            console.log(arrProductsId);
             setProducts(arrProductsId);
-            console.log(products);
             arrInitialOrders = arrInitialOrders.filter(x => Number(x.id) !== productId);
-            console.log(arrInitialOrders);
             setArrOrders(arrInitialOrders);
-            console.log(arrOrders);
             if (!arrProd.find(x => {
                 return x.id === productId
             })) {
                 arrProd.push(data);
             } else {
-                console.log(arrProd);
                 arrProd.forEach((item, i) => {
                     if (item.id == Number(productId)) {
                         arrProd[i] = data;
@@ -254,16 +286,12 @@ const UserOrders = () => {
             }
             return;
         }
-        console.log(orderData);
         if (orderData.length > 0) {
-            console.log(orderData);
             if (!orderData.find(x => x.id === productId)) {
-                console.log(11);
                 updateConfirmedOrder(dateTime, userId, productId);/////////////////////
                 deleteOrder(userId, productId);
             }
         } else if (orderData.length === undefined) {
-            console.log(orderData);
             updateConfirmedOrder(dateTime, userId, productId);//////////////////
         }
         function remove(e) {
@@ -271,34 +299,22 @@ const UserOrders = () => {
                 return e.fk_product_id !== productId;
             }
         }
-        console.log(orderData);
-        console.log(arrProd);
         if (!arrProd.find(x => x.id === productId)) {
-            console.log(arrProd);
             arrProd.push(data);
-            console.log(arrProd);
         } else {
-            console.log(arrProd);
             arrProd.forEach((item, i) => {
                 if (item.id === productId) {
                     return item = data;
                 }
             });
-            console.log(arrProd);
         }
-        console.log(arrInitialOrders);
         arrInitialOrders = arrInitialOrders.filter(x => x.id !== productId);
-        console.log(arrInitialOrders);
         setArrOrders(arrInitialOrders);
-        console.log(products);
-        console.log(arrProductsId);
         setProducts(arrProductsId);
-        console.log(products);
         // navigate(`/users/${user.id}`);
     };
 
     async function updateConfirmedOrder(date, userId, productId) {
-        console.log(43);
         if (orderData.length > 0 && orderData.find(x => {
             return x.fk_product_id === Number(productId) && x.confirmed === 1
         })) {
@@ -337,35 +353,27 @@ const UserOrders = () => {
         function remove(e) {
             return e.fk_product_id !== productsId;
         }
-        console.log(orderData);
-        console.log(arrProducts);
         if (orderData.length > 0) {
-
-            const temp = orderData.filter(remove, productsId);
-            console.log(temp);
-            removeOrder(temp);
-            console.log(orderData);/////////////////////orderData acumulate orders(16)
-            arrProducts = arrProducts.filter(x => x !== temporaryProduct);
-            console.log(arrProducts);
-        } else {
             console.log(orderData);
+            const temp = orderData.filter(remove, productsId);
+            console.log(orderData);
+            removeOrder(temp);
+            arrProducts = arrProducts.filter(x => x !== temporaryProduct);
+        } else {
             // setOrderData({});
             removeOrder({});
             arrProducts = [];
         }
         deleteOrder(userId, productsId);
-        console.log(arrInitialOrders);
         arrInitialOrders = arrInitialOrders.filter(x => x.id !== productsId);
-        console.log(arrInitialOrders);
         setArrOrders(arrInitialOrders);
-        console.log(arrInitialOrders);
-        console.log(products);
-        console.log(arrProducts);
         setProducts(arrProducts);
-        console.log(products);
     };
 
     async function fetchProducts(productId, quantitNum, confirmed) {///////////////
+        console.log(typeof productId);
+        console.log(quantitNum);
+        console.log(confirmed);
         let temporaryOrder = {
             fk_product_id: productId,
             fk_users_id: userId,
@@ -375,27 +383,22 @@ const UserOrders = () => {
             date: null,
             date_sended: null
         }
-        // let currentOrder = orderData;
-        // console.log(currentOrder);
-        // console.log(confirmed);
-        // currentOrder.push(temporaryOrder);
-        // console.log(currentOrder);
-
-        console.log(temporaryOrder);
-        // console.log(productId);
-        // console.log(quantitNum);
-        // console.log(confirmed);
-        console.log(orderData);
         let res;
+        // console.log(temporaryOrder.length);
+        // if(temporaryOrder.length === 0 && num === 0){
+        //     console.log(33);
+        //     bool = true;
+        // }
         try {
             res = await axios.post("http://localhost:5000/api/product/get", { productId })
                 .then((data) => {
+                    console.log(data.data[0]);
                     const prod = data.data[0];
-                    console.log(prod);////////////////
                     return prod;
                 })
                 .catch((error) => console.log(error));
             res.quantity = quantitNum;
+            console.log(res);
             if (confirmed === 1 && !arrProd.find(y => y.id === productId
             )) {
                 const dateTemp = new Date().toISOString().slice(0, 19).replace('T', ' ');
@@ -406,33 +409,20 @@ const UserOrders = () => {
                 dataOfOrder.date = dateTemp;
                 arrProd.push(dataOfOrder);//////
             }
-            console.log(arrInitialOrders);//////////////////
-            console.log(productId);
-            console.log(confirmed);
-            console.log(arrInitialOrders.find(y => y.id === productId));////////////////////
-            if (confirmed === 0 && !arrInitialOrders.find(y => y.id === productId)) {
-                console.log(arrInitialOrders);
-                arrProductsId.push(res.id);
-                console.log(productId);///////////////
-                arrInitialOrders.push(res);//////////////////zashto vliza
-                console.log(res);
-                console.log(arrInitialOrders);
-            }
-            console.log(arrInitialOrders);
-            setArrOrders(arrInitialOrders);
-            console.log(products);
-            console.log(arrProducts);
-            setProducts(arrProducts);
-            console.log(products);
-            // return;
+
         } catch (err) {
+            console.log(err.response);
             toast.error(err.response);
         }
-
+        // setTakeProduct(res);
+        console.log(res);
+        // console.log(takeProduct);
+        return res;
     };
 
     return (
         <>
+            {/* {fillInitialOrders()} */}
             {arrOrders && arrOrders.length > 0 ? arrOrders.map(x =>
                 < form className="sell__10 sell-10" key={x.id}
                     name={x.id} >
@@ -478,7 +468,9 @@ const UserOrders = () => {
             {arrProd.length > 0 ?
                 <>
                     <h2 className="user-ordered">Поръчaни</h2>
-                    {arrProd.map(x =>
+                    {arrProd.map(x => {
+                        console.log(x.id);
+                        console.log(typeof x.id);
                         <div className="sended__container" key={x.id}>
                             <img src={x.picture} alt="pic product"></img>
                             <div className="sended__title">
@@ -494,7 +486,8 @@ const UserOrders = () => {
                             <div className="sended__text">
                                 <p>Поръчката се обработва</p>
                             </div>
-                        </div>)}
+                        </div>
+                    })}
                 </>
 
                 : ''

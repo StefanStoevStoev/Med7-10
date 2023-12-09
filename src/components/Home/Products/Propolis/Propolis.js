@@ -2,6 +2,7 @@ import { useState } from "react";
 
 import "../../../../css/honey.css";
 import PropolisFull from "./PropolisFull";
+import home_product_propolis from '../../../../images/home_product_propolis.jpg';
 
 const Propolis = ({ removeHoney, removePollen }) => {
   const [open, setOpen] = useState(false);
@@ -25,7 +26,8 @@ const Propolis = ({ removeHoney, removePollen }) => {
     return (
         <div className={propolisFull}>
         <img
-          src="https://maslo-dishi.ru/upload/images-for-oksana/photo-for-articles/436.jpg"
+        src={home_product_propolis}
+          // src="https://maslo-dishi.ru/upload/images-for-oksana/photo-for-articles/436.jpg"
           alt="propolis"
         />
         <div className="products__propolis-text">

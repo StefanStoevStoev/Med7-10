@@ -1,6 +1,7 @@
 import { useState } from "react";
 import HoneyFull from "./HoneyFull";
 import "../../../../css/honey.css";
+import home_product_natural_honey from '../../../../images/home_product_natural_honey.webp';
 // import oldStylesheet from "../../../../css/products.css";
 // let oldStylesheet = import('../../../../css/products.css');
 
@@ -26,7 +27,8 @@ const Honey = ({ removePollen, removePropolis }) => {
   return (
     <div className={honeyFull}>
       <img className="img"
-        src="https://5.imimg.com/data5/UD/MB/MY-42635865/natural-honey-500x500.jpg"
+      src={home_product_natural_honey}
+        // src="https://5.imimg.com/data5/UD/MB/MY-42635865/natural-honey-500x500.jpg"
         alt="honey"
       />
       <h4>Пчелен мед</h4>
