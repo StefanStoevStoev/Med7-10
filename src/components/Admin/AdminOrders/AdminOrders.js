@@ -56,7 +56,6 @@ const AdminOrders = ({ arrData, setArrData, arrSendedOrders, setArrSendedOrders,
 
         cancelOrderSended1(userId, productId);
         temporarySendedOrders = arrSendedOrders;
-        // console.log(temporarySendedOrders);
         temporarySendedOrders = temporarySendedOrders.filter(function (x) {
             if (x.userid === userId) {
                 if (x.productid === productId) {
@@ -81,7 +80,7 @@ const AdminOrders = ({ arrData, setArrData, arrSendedOrders, setArrSendedOrders,
         const getPrice = element.querySelector('p[class="price"]').textContent;
         const regex = /\d+/g;
 
-        const picture = element.querySelector("img").src;
+        let picture = element.querySelector("img").src;
         const title = element.querySelector('p[class="title"]').textContent;
         const quantity = Number(element.querySelector('p[class="quantity"]').textContent.match(regex)[0]);
         const price = Number(getPrice.match(regex)[0]);
@@ -96,6 +95,10 @@ const AdminOrders = ({ arrData, setArrData, arrSendedOrders, setArrSendedOrders,
         const street = element.querySelector('p[class="street"]').textContent;
         const streetNumber = element.querySelector('p[class="street-number"]').textContent;
         const dateTimeNow = new Date().toISOString().slice(0, 19).replace('T', ' ');
+
+        const pic = picture.split('/').splice(-1);
+        const picNamePart = pic[0].split(".")[0];
+        picture = picNamePart;
 
         const data = {
             name: name,
@@ -219,7 +222,9 @@ const AdminOrders = ({ arrData, setArrData, arrSendedOrders, setArrSendedOrders,
                 {arrData.length > 0 ? arrData.map((x, index) =>
                     <form className="admin__order" key={x.productid + x.userid}
                         name={x.userid} title={x.productid}>
-                        <img src={x.picture} alt="product-picture" />
+                        <img
+                            src={require(`../../../images/${x.picture}.jpg`)}
+                            alt="product-picture" />
                         <section className="admin__order-product">
                             <p className='title' >{x.title}</p>
                             <p className="weight">{x.weight}кг.</p>
@@ -257,7 +262,9 @@ const AdminOrders = ({ arrData, setArrData, arrSendedOrders, setArrSendedOrders,
                 {arrSendedOrders.length > 0 ? arrSendedOrders.map(x =>
                     <form className="admin__order" key={x.userid + x.productid}
                         name={x.userid} title={x.productid}>
-                        <img src={x.picture} alt="product-picture" />
+                        <img
+                            src={require(`../../../images/${x.picture}.jpg`)}
+                            alt="product-picture" />
                         <section className="admin__order-product">
                             <p className='title' >{x.title}</p>
                             <p className="weight">{x.weight}кг.</p>
