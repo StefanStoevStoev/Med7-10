@@ -9,7 +9,7 @@ let arrProd = [];
 let temporaryOrderData = [];
 
 const UserOrders = () => {
-    let { user, orderData, removeOrder, arrProductsId, setProducts, products } = useContext(AuthContext);
+    let { user, orderData, setOrderData, removeOrder, arrProductsId, setProducts, products } = useContext(AuthContext);
     const [arrOrders, setArrOrders] = useState([]);
     const userId = Number(user.id);
     let temporaryProduct = 0;
@@ -23,7 +23,6 @@ const UserOrders = () => {
                         arrInitialOrders.forEach((y) => {
                             if (y.id === x.id && y.quantity !== x.quantity) {
                                 y.quantity = x.quantity;
-                                // count++;
                             }
                         });
                         setArrOrders(arrInitialOrders);
@@ -31,11 +30,17 @@ const UserOrders = () => {
                     fetchProducts(x.fk_product_id, x.quantity, x.confirmed);
                 }
             })
+        } else {
+            setArrOrders([]);
+            arrInitialOrders = [];
+            setProducts = [];
         }
         if (orderData.fk_users_id !== undefined) {
             fetchProducts(orderData.fk_product_id, orderData.quantity, orderData.confirmed);
         };
     }, [orderData]);
+
+    
 
     useEffect(() => {
         if (orderData.length > 0) {
@@ -140,6 +145,9 @@ const UserOrders = () => {
                         item.quantity = quantity;
                     }
                 });
+            }
+            if(orderData.length === 1){
+                setOrderData({});
             }
             setProducts(arrProductsId);
             return;
