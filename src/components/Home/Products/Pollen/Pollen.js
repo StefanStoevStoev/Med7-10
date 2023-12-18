@@ -1,7 +1,7 @@
 import { useState } from "react";
 import "../../../../css/honey.css";
 import PollenFull from "./PollenFull";
-import home_product_bee_pollen from '../../../../images/home_product_bee_pollen.webp';
+import home_product_bee_pollen from '../../../../images/home_product_bee_pollen.jpg';
 
 const Pollen = ({ removeHoney, removePropolis }) => {
   const [open, setOpen] = useState(false);

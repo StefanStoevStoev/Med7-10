@@ -1,9 +1,7 @@
 import { useState } from "react";
 import HoneyFull from "./HoneyFull";
 import "../../../../css/honey.css";
-import home_product_natural_honey from '../../../../images/home_product_natural_honey.webp';
-// import oldStylesheet from "../../../../css/products.css";
-// let oldStylesheet = import('../../../../css/products.css');
+import home_product_natural_honey from '../../../../images/home_product_natural_honey.jpg';
 
 const Honey = ({ removePollen, removePropolis }) => {
   const [open, setOpen] = useState(false);

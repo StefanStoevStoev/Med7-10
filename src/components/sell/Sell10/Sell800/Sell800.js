@@ -2,7 +2,7 @@ import { useContext } from "react";
 import { useNavigate } from 'react-router-dom';
 
 import { AuthContext } from "../../../../contexts/AuthContext";
-import products_honey800g from '../../../../images/products_honey800g.webp';
+import products_honey800g from '../../../../images/products_honey800g.jpg';
 
 const Sell800 = () => {
   const { user, userProducts } = useContext(AuthContext);
