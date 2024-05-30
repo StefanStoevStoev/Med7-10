@@ -20,13 +20,10 @@ import Sell from "./components/sell/Sell";
 import User from "./components/User/User";
 
 import "./App.css";
-// import { useLocalStorage } from './hooks/useLocalStorage';
 let arrProductsId = [];
-
 
 function App() {
   const [user, setUser] = useState([]);
-  // const [auth, setAuth] = useLocalStorage('auth', {});
   let [orderData, setOrderData] = useState({});
   let [userProductsEdit, setUserProductsEdit] = useState([]);
   const [authEdit, setAuthEdit] = useState([]);
@@ -40,13 +37,12 @@ function App() {
 
   // useEffect(() => {
   //   console.log(orderData);
+
   // }, [orderData]);
 
+
   useEffect(() => {
-    const papa = userDetails(userId);
-    // console.log(products);
-    // console.log(orderData);
-    // console.log(usersOrders);
+    userDetails(userId);
   }, [user, products]);
 
   const removeOrder = (ordr) => {
@@ -80,10 +76,8 @@ function App() {
     };
   };
 
-  const userProducts = (productsData) => {////
-    console.log(productsData);
-    console.log(orderData);
-
+  const userProducts = (productsData) => {
+    // console.log(orderData);
     const userId = user.id;
     const productsId = productsData._id;
     const quantity = Number(productsData.quantity);
@@ -95,61 +89,53 @@ function App() {
       date: dateTime,
       confirmed: 0,
     }
-    console.log(dataOrder);
 
-    if (orderData.length > 0 && orderData.find(x => x.fk_product_id === productsId && x.confirmed === 0)) {
+    if (orderData.find(x => x.fk_product_id === productsId && x.confirmed === 0)) {
       updateNonConfirmedOrder(quantity, userId, productsId);
       console.log(userProductsEdit);
       let temporaryOrderData = orderData;
-
+      console.log(orderData);
       temporaryOrderData.forEach((item) => {
 
         if (item.fk_product_id === productsId && item.confirmed === 0) {
-          console.log(item.quantity);
-          console.log(quantity);
           item.quantity = quantity;
         }
       });
-      console.log(temporaryOrderData);
       setOrderData(temporaryOrderData);
-      console.log(orderData);
       navigate(`/users/${userId}`);
     } else {
-      console.log(arrProductsId);
-      console.log(productsId);
-      arrProductsId.push(productsId);////////////
-      console.log(arrProductsId);
+      arrProductsId.push(productsId);
       setUserProductsEdit(productsData);
-
+      // console.log(orderData);
       axios.post("http://localhost:5000/api/orders/insert", {
         userId,
         productsId,
         quantity,
       }).then((data) => {
-
-        temporaryOrderData.push(dataOrder);
-        console.log(temporaryOrderData);
+        // console.log(temporaryOrderData);
+        temporaryOrderData.push(dataOrder);//// push не се препоръчва за ползване
+        // console.log(temporaryOrderData);
+        // console.log(orderData);
         setOrderData(temporaryOrderData);
+        // console.log(orderData);
       }).catch((err) => toast.error(err.response));
+      // console.log(orderData);
       navigate(`/users/${userId}`);
     }
   };
+
   const userLogin = (authData) => {
     setUser(authData);
-    console.log(authData.role);
-    // setAuth(authData);
     const fetchOrders = async () => {
       const userId = authData.id;
       try {
         const res = await axios.post("http://localhost:5000/api/orders/get", { userId });
 
         temporaryOrderData = res.data;
-        console.log(temporaryOrderData);
         setOrderData(res.data);
       } catch (err) {
         toast.error(err.response);
       }
-      console.log(orderData);
     };
     fetchOrders();
     if (authData.role === 1) {
@@ -168,20 +154,16 @@ function App() {
     } catch (err) {
       toast.error(err.response);
     }
-    console.log(orderData);
-    console.log(usersOrders);
+    console.log(res);
     setUsersOrders(res);
   };
 
   const userRemove = () => {
     setUser([]);
-    // setAuth({});
   }
 
   const userLogout = () => {
     setUser([]);
-    // setAuth({});
-    // setUserProductsEdit([]);
     setOrderData({});
     navigate('/');
   };
@@ -191,9 +173,7 @@ function App() {
       const res = await axios.post("http://localhost:5000/api/user/get", {
         userId,
       }).then((data) => {
-        // console.log(data.data);
         setAuthEdit(data.data[0]);
-        // setCurrentUser(data.data);
         return data.data[0];
       }).catch((err) => toast.error(err.response.data));
     } catch (err) {

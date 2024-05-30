@@ -7,13 +7,13 @@ import { AuthContext } from "../../../contexts/AuthContext";
 import * as authService from "../../../services/authService";
 import CreateUserData from "../CreateUser/CreateUserData";
 
-const UserDetails = ({userEdit}) => {
+const UserDetails = ({ userEdit }) => {
   const { user, authEdit } = useContext(AuthContext);
   const [currentUser, setCurrentUser] = useState([]);
   const navigate = useNavigate();
 
-  let img = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ7g2MhQxCyhB-EYgYLpBqPTk_z3TrBZmEKww&usqp=CAU';
-  
+  const img = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ7g2MhQxCyhB-EYgYLpBqPTk_z3TrBZmEKww&usqp=CAU';
+
   async function userDetails(userId) {
     try {
       const res = await axios.post("http://localhost:5000/api/user/get", {
@@ -31,36 +31,38 @@ const UserDetails = ({userEdit}) => {
   // useEffect(()=> {
   //   if(authEdit.length === 0){
   //     console.log(currentUser);
-      
+
   //   };
   // },[]);
 
   const onClick = (e) => {
     e.preventDefault();
-    <CreateUserData userEdit={userEdit}/>
+    <CreateUserData userEdit={userEdit} />
     navigate(`/users/${user.id}/edit`);
   };
 
   const userDelete = (e) => {
     e.preventDefault();
-    
+
     const confirmation = window.confirm('Наистина ли искате да изтриете профила си?');
-    
-    if (confirmation){
+
+    if (confirmation) {
       authService.remove(user._id);
     }
   };
 
   return (
     <div className="user__details">
-      <form  action="">
+      <form action="">
         <img
-        // src="https://woman.bg/static/uploads/content/39/b73daf9413b5f7ab4375270508164976.jpg"
-        src={
-          authEdit.picture !== '' || authEdit.picture !== undefined
-            ? authEdit.picture 
-            : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ7g2MhQxCyhB-EYgYLpBqPTk_z3TrBZmEKww&usqp=CAU"
-        }
+          // src="https://woman.bg/static/uploads/content/39/b73daf9413b5f7ab4375270508164976.jpg"
+          src={
+            authEdit.picture === '' ||
+              authEdit.picture === undefined ||
+              authEdit.picture === img
+              ? img
+              : authEdit.picture
+          }
           alt="user-picture2"
         />
         <div className="user__details-info">
@@ -89,11 +91,11 @@ const UserDetails = ({userEdit}) => {
               <li>{authEdit.city}</li>
               <li>{authEdit.street}</li>
               <li>{authEdit.street_number}</li>
-              <li>{authEdit.picture === '' || authEdit.picture === 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ7g2MhQxCyhB-EYgYLpBqPTk_z3TrBZmEKww&usqp=CAU' ? '' : authEdit.picture }</li>
+              <li>{authEdit.picture === '' || authEdit.picture === img ? '' : authEdit.picture}</li>
             </ul>
           </div>
         </div>
-        
+
         <div className="user__details-buttons">
           <button className="btn-edit" onClick={onClick}>
             промени

@@ -9,8 +9,6 @@ let boolUserOrders = true;
 let temporaryOrders = [];
 let temporarySendedOrders = [];
 
-
-
 const AdminOrders = ({ arrData, setArrData, arrSendedOrders, setArrSendedOrders, arrOrders }) => {
     let { usersOrders, setUsersOrders } = useContext(AuthContext);
     let temporaryProductId = 0;

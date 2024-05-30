@@ -15,7 +15,7 @@ const UserOrders = () => {
     let temporaryProduct = 0;
 
     useEffect(() => {
-
+        console.log(arrInitialOrders);
         if (orderData.length > 0) {
             orderData.map((x) => {
                 if (!products.find(pp => pp === x.fk_product_id)) {
@@ -25,42 +25,48 @@ const UserOrders = () => {
                                 y.quantity = x.quantity;
                             }
                         });
-                        setArrOrders(arrInitialOrders);
+                        // setArrOrders(arrInitialOrders);
                     }
                     fetchProducts(x.fk_product_id, x.quantity, x.confirmed);
+                    console.log(arrOrders);
                 }
             })
         } else {
+            console.log(2);
             setArrOrders([]);
             arrInitialOrders = [];
             setProducts = [];
         }
         if (orderData.fk_users_id !== undefined) {
             fetchProducts(orderData.fk_product_id, orderData.quantity, orderData.confirmed);
+            console.log(arrOrders);
         };
+        console.log(arrInitialOrders);
+        console.log(arrOrders);
+        console.log(orderData);
     }, [orderData]);
 
-    
 
-    useEffect(() => {
-        if (orderData.length > 0) {
-            orderData.map((x) => {
-                console.log(products);////products repeat
-                if (!products.find(pp => pp === x.fk_product_id)) {
-                    if (arrInitialOrders.length > 0) {
-                        arrInitialOrders.forEach((y) => {
-                            if (y.id === x.fk_product_id && y.quantity !== x.quantity) {
-                                y.quantity = x.quantity;
-                            }
-                        });
-                        setArrOrders(arrInitialOrders);
-                    }
-                    fetchProducts(x.fk_product_id, x.quantity, x.confirmed);
-                }
-            })
-        }
-        arrProducts = arrProducts.filter(x => x !== temporaryProduct);
-    }, [arrInitialOrders]);
+
+    // useEffect(() => {
+    //     if (orderData.length > 0) {
+    //         orderData.map((x) => {
+    //             console.log(products);////products repeat
+    //             if (!products.find(pp => pp === x.fk_product_id)) {
+    //                 if (arrInitialOrders.length > 0) {
+    //                     arrInitialOrders.forEach((y) => {
+    //                         if (y.id === x.fk_product_id && y.quantity !== x.quantity) {
+    //                             y.quantity = x.quantity;
+    //                         }
+    //                     });
+    //                     // setArrOrders(arrInitialOrders);
+    //                 }
+    //                 // fetchProducts(x.fk_product_id, x.quantity, x.confirmed);
+    //             }
+    //         })
+    //     }
+    //     arrProducts = arrProducts.filter(x => x !== temporaryProduct);
+    // }, [arrInitialOrders]);
 
     async function updateQuantityOfOrder(quantity, date, userId, productId) {
         let res;
@@ -120,36 +126,44 @@ const UserOrders = () => {
             confirmed: 1,
         }
         temporaryOrderData = orderData;
+        console.log(arrOrders);
 
         if (orderData.length > 0 && orderData.find(x => x.fk_product_id === productId && x.confirmed === 0)) {
             deleteConfirmedOrder(userId, productId);
             updateQuantityOfOrder(quantity, dateTime, userId, productId);
-
+            console.log(arrOrders);
             temporaryOrderData.filter((item) => item.fk_product_id === productId && item.confirmed === 0
             );
             removeOrder(temporaryOrderData);
             // setOrderData(arrInitialOrders);
             arrProductsId = arrProductsId.filter(x => x !== productId);
             arrInitialOrders = arrInitialOrders.filter(x => x.id !== productId);
+            console.log(arrOrders);
             if (arrInitialOrders.length > 0) {
                 setArrOrders(arrInitialOrders);
+                console.log(arrOrders);
             } else {
                 setArrOrders(arrOrders.filter(a => a.id !== productId));
+                console.log(arrOrders);
             }
 
             if (!arrProd.find(x => x.id === productId)) {
                 arrProd.push(data);
+                console.log(arrProd);
+
             } else {
                 arrProd.forEach((item) => {// ne raboti
                     if (item.id === productId) {
                         item.quantity = quantity;
                     }
                 });
+                console.log(arrProd);
             }
-            if(orderData.length === 1){
+            if (orderData.length === 1) {
                 setOrderData({});
             }
             setProducts(arrProductsId);
+            console.log(arrOrders);
             return;
         } else if (orderData.length === undefined && orderData.fk_product_id === productId && orderData.confirmed === 0) {
             deleteConfirmedOrder(userId, productId);
@@ -159,6 +173,7 @@ const UserOrders = () => {
             setProducts(arrProductsId);
             arrInitialOrders = arrInitialOrders.filter(x => Number(x.id) !== productId);
             setArrOrders(arrInitialOrders);
+            console.log(arrOrders);
             if (!arrProd.find(x => {
                 return x.id === productId
             })) {
@@ -170,15 +185,21 @@ const UserOrders = () => {
                     }
                 });
             }
+            console.log(arrOrders);
             return;
         }
         if (orderData.length > 0) {
+            console.log(arrOrders);
             if (!orderData.find(x => x.id === productId)) {
+                console.log(orderData);
                 updateConfirmedOrder(dateTime, userId, productId);/////////////////////
                 deleteOrder(userId, productId);
+                console.log(arrOrders);
             }
         } else if (orderData.length === undefined) {
+            console.log(orderData);
             updateConfirmedOrder(dateTime, userId, productId);//////////////////
+            console.log(arrOrders);
         }
         function remove(e) {
             if (e.confirmed === 1) {
@@ -186,17 +207,22 @@ const UserOrders = () => {
             }
         }
         if (!arrProd.find(x => x.id === productId)) {
+            console.log(arrProd);
             arrProd.push(data);
+            console.log(arrOrders);
         } else {
+            console.log(arrProd);
             arrProd.forEach((item, i) => {
                 if (item.id === productId) {
                     return item = data;
                 }
             });
             console.log(arrProd);
+            console.log(arrOrders);
         }
         arrInitialOrders = arrInitialOrders.filter(x => x.id !== productId);
         setArrOrders(arrInitialOrders);
+        console.log(arrOrders);
         setProducts(arrProductsId);
     };
 
@@ -252,6 +278,7 @@ const UserOrders = () => {
         deleteOrder(userId, productsId);
         arrInitialOrders = arrInitialOrders.filter(x => x.id !== productsId);
         setArrOrders(arrInitialOrders);
+        console.log(arrOrders);
         setProducts(arrProducts);
     };
 
@@ -281,17 +308,20 @@ const UserOrders = () => {
                 arrProductsId.push(res.id);
                 arrInitialOrders.push(res);
             }
-            setArrOrders(arrInitialOrders);
+            console.log(arrOrders);
+            setArrOrders(prevArray => [...prevArray, res]);
+            console.log(arrOrders);
             setProducts(arrProducts);
         } catch (err) {
             toast.error(err.response);
         }
-
+        console.log(arrOrders);
     };
-
+    console.log(arrOrders);
     return (
         <>
             {arrOrders && arrOrders.length > 0 ? arrOrders.map(x =>
+            
                 < form className="sell__10 sell-10" key={x.id}
                     name={x.id} >
                     <img

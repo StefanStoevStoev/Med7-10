@@ -1,9 +1,3 @@
-// import { useContext } from "react"
-
-// import { AuthContext } from "../contexts/AuthContext";
-
-// const { userProducts } = useContext(AuthContext);
-
 export const newClick = (e) => {
     e.preventDefault();
    const title = document.querySelector('h4[class="title"]').textContent;

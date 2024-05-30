@@ -31,7 +31,6 @@ const Sell10p = () => {
       _id: 2,
     }
     userProducts(data);
-    // addProductToUser
   };
 
   return (

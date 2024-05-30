@@ -10,6 +10,7 @@ const CreateUserData = () => {
   const navigate = useNavigate();
   const userId = user.id;
   let image = '';
+  const img = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ7g2MhQxCyhB-EYgYLpBqPTk_z3TrBZmEKww&usqp=CAU';
 
   async function updateUserDetails(userData) {
 
@@ -37,7 +38,7 @@ const CreateUserData = () => {
 
     let userData = Object.fromEntries(new FormData(form, submitter));
 
-    if (user.picture === "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ7g2MhQxCyhB-EYgYLpBqPTk_z3TrBZmEKww&usqp=CAU" || user.picture === undefined) {
+    if (user.picture === img || user.picture === undefined) {
       image = '';
     } else {
       image = user.picture;
@@ -56,8 +57,8 @@ const CreateUserData = () => {
       <form action="" className="form" onSubmit={getUserData}>
         <img
           src={
-            authEdit.picture === '' || authEdit.picture === undefined || authEdit.picture === 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ7g2MhQxCyhB-EYgYLpBqPTk_z3TrBZmEKww&usqp=CAU'
-              ? "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ7g2MhQxCyhB-EYgYLpBqPTk_z3TrBZmEKww&usqp=CAU"
+            authEdit.picture === '' || authEdit.picture === undefined || authEdit.picture === img
+              ? img
               : authEdit.picture
           }
           alt="user-picture2"
@@ -186,7 +187,7 @@ const CreateUserData = () => {
                     <input
                       className="fld"
                       name="picture"
-                      defaultValue={authEdit.picture === '' || authEdit.picture === 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ7g2MhQxCyhB-EYgYLpBqPTk_z3TrBZmEKww&usqp=CAU' ? '' : authEdit.picture}
+                      defaultValue={authEdit.picture === '' || authEdit.picture === img ? '' : authEdit.picture}
                       id="picture"
                       type="text"
                     />
